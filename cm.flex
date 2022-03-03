@@ -1,7 +1,7 @@
 /*
-  Created By: Fei Song
-  File Name: tiny.flex
-  To Build: jflex tiny.flex
+  Created By: Indeep Farma, Kristen Samaroo
+  File Name: cm.flex
+  To Build: jflex cm.flex
 
   and then after the parser is created
     javac Lexer.java
@@ -87,6 +87,9 @@ number = {digit}+
    between A and Z, a and z, zero and nine, or an underscore. */
 letter = [a-zA-Z]
 identifier = {letter}+
+
+/*  A comment is a string of words or characters that start with 
+    either // or /* and end with a *[forward slash] */
 comment =  \/\/.*|\/\*(.|LineTerminator)*\*\/
    
 %%
@@ -120,5 +123,4 @@ comment =  \/\/.*|\/\*(.|LineTerminator)*\*\/
 {identifier}       { return symbol(sym.ID, yytext()); }
 {WhiteSpace}+      { /* skip whitespace */ }   
 "{"[^\}]*"}"       { /* skip comments */ }
-{comment}          { System.out.println(yytext());}
 .                  { return symbol(sym.ERROR); }
