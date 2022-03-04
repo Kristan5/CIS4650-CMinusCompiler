@@ -70,12 +70,17 @@ parser code {:
 
 /* ------------Declaration of Terminals and Non Terminals Section----------- */
    
+/* ------------- ------------- TERMINALS ------------- ------------- */
+
 terminal IF, ELSE, INT, RETURN, VOID, WHILE;
 terminal PLUS, MINUS, TIMES, OVER, LT, LTE, GT, GTE, EQEQ, NOTEQ, EQ;
 terminal SEMI, COMMA, LPAREN, RPAREN, LSQBRAC, RSQBRAC,LBRAC,RBRAC, NUM, ID;
 terminal ERROR;
+
+/* ------------- ------------- NON-TERMINALS ------------- ------------- */
    
-non terminal program;
+non terminal DecList program, decl_list;
+non terminal ;
 
 /* ----------------------------Grammar Section-------------------- */
    
