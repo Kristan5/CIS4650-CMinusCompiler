@@ -127,5 +127,5 @@ comment =  \/\/.*|\/\*(.|LineTerminator)*\*\/
 {identifier}       { return symbol(sym.ID, yytext()); }
 {WhiteSpace}+      { /* skip whitespace */ }   
 "{"[^\}]*"}"       { /* skip comments */ }
-// {comment}          { /* skip comments */}
+{comment}          { /* skip comments */}
 .                  { return symbol(sym.ERROR); }
