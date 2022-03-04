@@ -14,6 +14,10 @@ test:
 	make
 	java -cp /usr/share/java/cup.jar:. Main testFiles/fac.cm
 
+remake: 
+	make clean
+	make
+
 Main.class: absyn/*.java parser.java sym.java Lexer.java ShowTreeVisitor.java Scanner.java Main.java
 
 %.class: %.java

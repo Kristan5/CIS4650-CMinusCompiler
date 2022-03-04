@@ -1,4 +1,19 @@
-A JFlex+Cup implementation for the Tiny programming language.
+
+## Development Steps:
+### 1. cm.flex (DONE)
+### 2. cm.cup 
+### 3. ShowTreeVisitor.java
+### 4. /absyn - and classes within it
+### 5. absyn/AbsynVisitor.java
+
+
+
+
+
+
+# Other: 
+
+## A JFlex+Cup implementation for the Tiny programming language.
 
   Please note that you need to modify the paths for CLASSPATH, JFLEX, and CUP in 
 the Makefile so that the related commands can be found on your particular 
