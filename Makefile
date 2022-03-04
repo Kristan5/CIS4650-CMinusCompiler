@@ -12,7 +12,7 @@ all: Main.class
 test: 
 	make clean 
 	make
-	java -cp /usr/share/java/cup.jar:. Main fac.tiny
+	java -cp /usr/share/java/cup.jar:. Main testFiles/fac.tiny
 
 Main.class: absyn/*.java parser.java sym.java Lexer.java ShowTreeVisitor.java Scanner.java Main.java
 
