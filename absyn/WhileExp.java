@@ -1,13 +1,13 @@
 package absyn;
 
-public class RepeatExp extends Exp {
-  public ExpList exps;
+public class WhileExp extends Exp {
   public Exp test;
+  public ExpList thenpart;
+  public ExpList elsepart;
 
-  public RepeatExp( int row, int col, ExpList exps, Exp test ) {
+  public WhileExp( int row, int col, Exp test, ExpList thenpart, ExpList elsepart ) {
     this.row = row;
     this.col = col;
-    this.exps = exps;
     this.test = test;
   }
 

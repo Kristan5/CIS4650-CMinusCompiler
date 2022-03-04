@@ -12,19 +12,19 @@ all: Main.class
 test: 
 	make clean 
 	make
-	java -cp /usr/share/java/cup.jar:. Main testFiles/fac.tiny
+	java -cp /usr/share/java/cup.jar:. Main testFiles/fac.cm
 
 Main.class: absyn/*.java parser.java sym.java Lexer.java ShowTreeVisitor.java Scanner.java Main.java
 
 %.class: %.java
 	$(JAVAC) $(CLASSPATH) $^
 
-Lexer.java: cminus.flex
-	$(JFLEX) cminus.flex
+Lexer.java: cm.flex
+	$(JFLEX) cm.flex
 
-parser.java: cminus.cup
-	#$(CUP) -dump -expect 3 cminus.cup
-	$(CUP) -expect 3 cminus.cup
+parser.java: cm.cup
+	#$(CUP) -dump -expect 3 cm.cup
+	$(CUP) -expect 3 cm.cup
 
 clean:
 	rm -f parser.java Lexer.java sym.java *.class absyn/*.class *~
