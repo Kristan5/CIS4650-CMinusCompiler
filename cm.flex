@@ -1,7 +1,7 @@
 /*
-  Created By: Fei Song
-  File Name: tiny.flex
-  To Build: jflex tiny.flex
+  Created By: Indeep Farma, Kristen Samaroo
+  File Name: cm.flex
+  To Build: jflex cm.flex
 
   and then after the parser is created
     javac Lexer.java
@@ -87,6 +87,9 @@ number = {digit}+
    between A and Z, a and z, zero and nine, or an underscore. */
 letter = [a-zA-Z]
 identifier = {letter}+
+
+/*  A comment is a string of words or characters that start with 
+    either // or /* and end with a *[forward slash] */
 comment =  \/\/.*|\/\*(.|LineTerminator)*\*\/
    
 %%
@@ -98,27 +101,33 @@ comment =  \/\/.*|\/\*(.|LineTerminator)*\*\/
    regular expression. */
    
 "if"               { return symbol(sym.IF); }
-"then"             { return symbol(sym.THEN); }
 "else"             { return symbol(sym.ELSE); }
-"end"              { return symbol(sym.END); }
-"repeat"           { return symbol(sym.REPEAT); }
-"until"            { return symbol(sym.UNTIL); }
-"read"             { return symbol(sym.READ); }
-"write"            { return symbol(sym.WRITE); }
-":="               { return symbol(sym.ASSIGN); }
-"="                { return symbol(sym.EQ); }
-"<"                { return symbol(sym.LT); }
-">"                { return symbol(sym.GT); }
+"int"              { return symbol(sym.INT); }      /***** ADD THIS TO SYMBOL *****/
+"return"           { return symbol(sym.RETURN); }   /***** ADD THIS TO SYMBOL *****/
+"void"             { return symbol(sym.VOID); }      /***** ADD THIS TO SYMBOL *****/
+"while"            { return symbol(sym.WHILE); }     /***** ADD THIS TO SYMBOL *****/
 "+"                { return symbol(sym.PLUS); }
 "-"                { return symbol(sym.MINUS); }
 "*"                { return symbol(sym.TIMES); }
 "/"                { return symbol(sym.OVER); }
+"<"                { return symbol(sym.LT); }
+"<="               { return symbol(sym.LTE); }      /***** ADD THIS TO SYMBOL *****/
+">"                { return symbol(sym.GT); }
+">="               { return symbol(sym.GTE); }      /***** ADD THIS TO SYMBOL *****/
+"=="               { return symbol(sym.EQEQ); }     /***** ADD THIS TO SYMBOL *****/
+"!="               { return symbol(sym.NOTEQ); }    /***** ADD THIS TO SYMBOL *****/
+"="                { return symbol(sym.EQ); }
+";"                { return symbol(sym.SEMI); }
+","                { return symbol(sym.COMMA); }    /***** ADD THIS TO SYMBOL *****/
 "("                { return symbol(sym.LPAREN); }
 ")"                { return symbol(sym.RPAREN); }
-";"                { return symbol(sym.SEMI); }
+"["                { return symbol(sym.LSQBRAC); }  /***** ADD THIS TO SYMBOL *****/
+"]"                { return symbol(sym.RSQBRAC); }  /***** ADD THIS TO SYMBOL *****/
+"{"                { return symbol(sym.LBRAC); }    /***** ADD THIS TO SYMBOL *****/
+"}"                { return symbol(sym.RBRAC); }    /***** ADD THIS TO SYMBOL *****/
 {number}           { return symbol(sym.NUM, yytext()); }
 {identifier}       { return symbol(sym.ID, yytext()); }
 {WhiteSpace}+      { /* skip whitespace */ }   
 "{"[^\}]*"}"       { /* skip comments */ }
-{comment}          { System.out.println(yytext());}
+{comment}          { /* skip comments */}
 .                  { return symbol(sym.ERROR); }
