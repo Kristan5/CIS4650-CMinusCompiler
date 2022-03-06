@@ -1,5 +1,5 @@
 package absyn;
 
-public class Decl {
+public class Dec {
     
 }

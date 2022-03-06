@@ -79,7 +79,20 @@ terminal ERROR;
 
 /* ------------- ------------- NON-TERMINALS ------------- ------------- */
    
+non terminal Dec decl, fun_decl;
 non terminal DecList program, decl_list;
+non terminal VarDec param, var_decl;
+non terminal Type type;
+
+// REMOVE //
+non terminal VarDecList param_list, local_decls;
+non terminal ExpList stmt_list, args, arg_list;
+
+non terminal Var var;
+
+non terminal Exp compound_stmt, stmt, expr_stmt, selection_stmt, iteration_stmt, return_stmt;
+non terminal Exp expr, call;
+non terminal Exp if_stmt;
 
 /* ---------------------------- ----------------------------*/
 
@@ -95,52 +108,53 @@ program        ::=   decl_list: decList
                      {:RESULT = decList;:}
                ;
 
-decl         ::= var_decl:i
-                 {: RESULT = i; :}
-               | fun_decl:r
-                 {: RESULT = r; :}
-               ;
-
 decl_list     ::= decl_list:d1 decl:d2 
-                 {: DeclList t = d1;
+                 {: DecList t = d1;
                     while( t.tail != null )
                       t = t.tail;
-                    t.tail = new DeclList(d2, null);
+                    t.tail = new DecList(d2, null);
                     RESULT = d1;
                  :}
                | decl:d
-                 {: RESULT = new DeclList(d, null); :}
+                 {: RESULT = new DecList(d, null); :}
                | error SEMI decl:d
-                 {: parser.report_error("Invalid Syntax in DeclList", null); 
-                    RESULT = new DeclList(d, null); 
+                 {: parser.report_error("Invalid Syntax in DecList", null); 
+                    RESULT = new DecList(d, null); 
                  :}
                ;
 
+decl           ::= var_decl:i
+                  {: RESULT = i; :}
+                  | fun_decl:r
+                  {: RESULT = r; :}
+                  ;
 
-stmt         ::= if_stmt:i
-                 {: RESULT = i; :}
-               | repeat_stmt:r
-                 {: RESULT = r; :}
-               | assign_stmt:a
-                 {: RESULT = a; :}
-               | read_stmt:r
-                 {: RESULT = r; :}
-               | write_stmt:w
-                 {: RESULT = w; :}
-               ;
-
-var_dec        ::=   INT ID:  id
+var_decl       ::=   INT ID:  id
                      {:RESULT = id;:}     /* WRITE THE RESULT */
                |     INT ID: id2
                      {:RESULT = id2;:}    /* WRITE THE RESULT */
+               ;
 
-type           ::= INTEGER:i
+type           ::= INT:i
                     {: RESULT = new Type(ileft, Type.INT); :}
                   | VOID:v
                     {: RESULT = new Type(vleft, Type.VOID); :}
                   ;
-if_stmt        ::= IF:i exp:e THEN stmt_seq:s END
-                  {: RESULT = new IfExp(ileft, iright, e, s, null); :}
-                  | IF:i exp:e THEN stmt_seq:s1 ELSE stmt_seq:s2 END
-                  {: RESULT = new IfExp(ileft, iright, e, s1, s2); :}
-                  ;
+
+// stmt         ::= if_stmt:i
+//                  {: RESULT = i; :}
+//                | repeat_stmt:r
+//                  {: RESULT = r; :}
+//                | assign_stmt:a
+//                  {: RESULT = a; :}
+//                | read_stmt:r
+//                  {: RESULT = r; :}
+//                | write_stmt:w
+//                  {: RESULT = w; :}
+//                ;
+
+// if_stmt        ::= IF:i exp:e THEN stmt_seq:s END
+//                   {: RESULT = new IfExp(ileft, iright, e, s, null); :}
+//                   | IF:i exp:e THEN stmt_seq:s1 ELSE stmt_seq:s2 END
+//                   {: RESULT = new IfExp(ileft, iright, e, s1, s2); :}
+//                   ;

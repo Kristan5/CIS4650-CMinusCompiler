@@ -1,7 +1,8 @@
 package absyn;
 
 public class NilExp {
-    public NilExp( int pos ) {
-      this.pos = pos;
-    }
+  public int pos;
+  public NilExp( int pos ) {
+    this.pos = pos;
+  }
 }

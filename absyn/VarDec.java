@@ -1,6 +1,6 @@
 package absyn;
 
-public class VarDecl {
+public abstract class VarDec extends Dec {
     public Type type; 
     public String name; 
 }

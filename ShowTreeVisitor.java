@@ -83,13 +83,13 @@ public class ShowTreeVisitor implements AbsynVisitor {
   }
 
   // Variable Declaration
-  public void visit( VarDecl exp, int level ) {
+  public void visit( VarDec exp, int level ) {
     indent( level );
     System.out.println( "VarExp: " + exp.name );
   }
 
   // Variable Declaration List
-  public void visit( VarDeclList exp, int level ) {
+  public void visit( VarDecList exp, int level ) {
     indent( level );
     System.out.println( "VarExp: " + exp.name );
   }
