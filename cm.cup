@@ -89,7 +89,27 @@ precedence left TIMES, DIVIDE;
 precedence left ELSE;
 
 /* ----------------------------Grammar Section-------------------- */
-   
+
 start with program;
 
-program	     ::= ;
+program        ::=   decl_list: decList
+                     {:RESULT = decList;:}
+               ;
+
+decl_list      ::=   decl_list: decList
+                     declaration: dec
+                                          /* WRITE THE RESULTS*/
+               |     declaration: dec
+                                          /* WRITE TEH RESULTS */
+               ;
+
+declaration    ::=   var_dec: varDec
+                     {:RESULT = varDec;:}
+               |     fun_decl: funDec
+                     {:RESULT = funDec;:}
+               ;
+
+var_dec        ::=   INT ID:  id
+                     {:RESULT = id;:}     /* WRITE THE RESULT */
+               |     INT ID: id2
+                     {:RESULT = id2;:}    /* WRITE THE RESULT */
