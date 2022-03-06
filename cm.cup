@@ -72,9 +72,10 @@ parser code {:
    
 /* ------------- ------------- TERMINALS ------------- ------------- */
 
+terminal String ID, NUM;
 terminal IF, ELSE, INT, RETURN, VOID, WHILE;
 terminal PLUS, MINUS, TIMES, DIVIDE, OVER, LT, LTE, GT, GTE, EQEQ, NOTEQ, EQ;
-terminal SEMI, COMMA, LPAREN, RPAREN, LSQBRAC, RSQBRAC,LBRAC,RBRAC, NUM, ID;
+terminal SEMI, COMMA, LPAREN, RPAREN, LSQBRAC, RSQBRAC,LBRAC,RBRAC, LSQUARE, RSQUARE;
 terminal ERROR;
 
 /* ------------- ------------- NON-TERMINALS ------------- ------------- */
@@ -129,11 +130,18 @@ decl           ::= var_decl:i
                   {: RESULT = r; :}
                   ;
 
-var_decl       ::=   INT ID:  id
-                     {:RESULT = id;:}     /* WRITE THE RESULT */
-               |     INT ID: id2
-                     {:RESULT = id2;:}    /* WRITE THE RESULT */
-               ;
+var_decl    ::= type:t ID:i SEMI
+                {:  RESULT = new SimpleDec(tleft, t, i); :}
+              | type:t ID:i LSQUARE NUM:n RSQUARE SEMI
+               //  {: RESULT = new ArrayDec(tleft,t, i, new IntExp(nleft, nright, Integer.parseInt(n))); :}
+                {: RESULT = new ArrayDec(tleft,t, i, new IntExp(nleft, nright, null)); :}
+            //   | type:t ID:i LSQUARE error:e RSQUARE:r SEMI
+            //     {: parser.report_error("Invalid syntax: array declaration", e);
+            //         :}
+            //   | type:t error:e SEMI
+            //     {: parser.report_error("Invalid syntax: variable declaration", e);
+            //         :}
+              ;
 
 type           ::= INT:i
                     {: RESULT = new Type(ileft, Type.INT); :}
