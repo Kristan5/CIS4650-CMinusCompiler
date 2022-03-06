@@ -8,4 +8,8 @@ public class FunctionExp extends Exp {
     // this.col = col;
     // this.test = test;
   }
+
+  public void accept( AbsynVisitor visitor, int level ) {
+    visitor.visit( this, level );
+  }
 }

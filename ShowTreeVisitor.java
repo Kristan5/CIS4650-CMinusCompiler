@@ -76,27 +76,67 @@ public class ShowTreeVisitor implements AbsynVisitor {
     exp.right.accept( this, level );
   }
 
+  public void visit( CallExp exp, int level ) {
+
+  }
+
+  public void visit ( DecList decList, int level) {
+
+  }
+  
+  public void visit ( Dec decl, int level) {
+
+  }
+
+  public void visit( Exp exp, int level ) {
+
+  }
+
+  public void visit( FunctionExp exp, int level ) {
+
+  }
+
+  public void visit( IndexVar exp, int level ) {
+
+  }
+  
+  public void visit( NilExp exp, int level ) {
+
+  }
+
+  public void visit( ReturnExp exp, int level ) {
+
+  }
+
+  public void visit( SimpleDec exp, int level ) {
+
+  }
+
+  public void visit( SimpleVar exp, int level ) {
+
+  }
+
   // Variable
   public void visit( Var exp, int level ) {
-    indent( level );
-    System.out.println( "VarExp: " + exp.name );
+
   }
 
   // Variable Declaration
   public void visit( VarDec exp, int level ) {
-    indent( level );
-    System.out.println( "VarExp: " + exp.name );
+
   }
 
   // Variable Declaration List
   public void visit( VarDecList exp, int level ) {
-    indent( level );
-    System.out.println( "VarExp: " + exp.name );
+
   }
 
   // Variable Expression
   public void visit( VarExp exp, int level ) {
-    indent( level );
-    System.out.println( "VarExp: " + exp.name );
+
+  }
+
+  public void visit( WhileExp exp, int level ) {
+
   }
 }
