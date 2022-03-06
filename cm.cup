@@ -80,7 +80,6 @@ terminal ERROR;
 /* ------------- ------------- NON-TERMINALS ------------- ------------- */
    
 non terminal DecList program, decl_list;
-non terminal ;
 
 /* ---------------------------- ----------------------------*/
 
@@ -96,20 +95,52 @@ program        ::=   decl_list: decList
                      {:RESULT = decList;:}
                ;
 
-decl_list      ::=   decl_list: decList
-                     declaration: dec
-                                          /* WRITE THE RESULTS*/
-               |     declaration: dec
-                                          /* WRITE TEH RESULTS */
+decl         ::= var_decl:i
+                 {: RESULT = i; :}
+               | fun_decl:r
+                 {: RESULT = r; :}
                ;
 
-declaration    ::=   var_dec: varDec
-                     {:RESULT = varDec;:}
-               |     fun_decl: funDec
-                     {:RESULT = funDec;:}
+decl_list     ::= decl_list:d1 decl:d2 
+                 {: DeclList t = d1;
+                    while( t.tail != null )
+                      t = t.tail;
+                    t.tail = new DeclList(d2, null);
+                    RESULT = d1;
+                 :}
+               | decl:d
+                 {: RESULT = new DeclList(d, null); :}
+               | error SEMI decl:d
+                 {: parser.report_error("Invalid Syntax in DeclList", null); 
+                    RESULT = new DeclList(d, null); 
+                 :}
+               ;
+
+
+stmt         ::= if_stmt:i
+                 {: RESULT = i; :}
+               | repeat_stmt:r
+                 {: RESULT = r; :}
+               | assign_stmt:a
+                 {: RESULT = a; :}
+               | read_stmt:r
+                 {: RESULT = r; :}
+               | write_stmt:w
+                 {: RESULT = w; :}
                ;
 
 var_dec        ::=   INT ID:  id
                      {:RESULT = id;:}     /* WRITE THE RESULT */
                |     INT ID: id2
                      {:RESULT = id2;:}    /* WRITE THE RESULT */
+
+type           ::= INTEGER:i
+                    {: RESULT = new Type(ileft, Type.INT); :}
+                  | VOID:v
+                    {: RESULT = new Type(vleft, Type.VOID); :}
+                  ;
+if_stmt        ::= IF:i exp:e THEN stmt_seq:s END
+                  {: RESULT = new IfExp(ileft, iright, e, s, null); :}
+                  | IF:i exp:e THEN stmt_seq:s1 ELSE stmt_seq:s2 END
+                  {: RESULT = new IfExp(ileft, iright, e, s1, s2); :}
+                  ;
