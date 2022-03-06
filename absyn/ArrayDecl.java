@@ -1,5 +1,5 @@
 package absyn;
 
-public class ArrayDecl {
+public class ArrayDecl extends VarDecl {
     
 }

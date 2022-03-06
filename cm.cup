@@ -73,7 +73,7 @@ parser code {:
 /* ------------- ------------- TERMINALS ------------- ------------- */
 
 terminal IF, ELSE, INT, RETURN, VOID, WHILE;
-terminal PLUS, MINUS, TIMES, OVER, LT, LTE, GT, GTE, EQEQ, NOTEQ, EQ;
+terminal PLUS, MINUS, TIMES, DIVIDE, OVER, LT, LTE, GT, GTE, EQEQ, NOTEQ, EQ;
 terminal SEMI, COMMA, LPAREN, RPAREN, LSQBRAC, RSQBRAC,LBRAC,RBRAC, NUM, ID;
 terminal ERROR;
 
@@ -81,6 +81,12 @@ terminal ERROR;
    
 non terminal DecList program, decl_list;
 non terminal ;
+
+/* ---------------------------- ----------------------------*/
+
+precedence left PLUS, MINUS;
+precedence left TIMES, DIVIDE;
+precedence left ELSE;
 
 /* ----------------------------Grammar Section-------------------- */
    

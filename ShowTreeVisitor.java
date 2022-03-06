@@ -8,6 +8,7 @@ public class ShowTreeVisitor implements AbsynVisitor {
     for( int i = 0; i < level * SPACES; i++ ) System.out.print( " " );
   }
 
+  // Expression List
   public void visit( ExpList expList, int level ) {
     while( expList != null ) {
       expList.head.accept( this, level );
@@ -15,6 +16,7 @@ public class ShowTreeVisitor implements AbsynVisitor {
     } 
   }
 
+  // Assign Expression
   public void visit( AssignExp exp, int level ) {
     indent( level );
     System.out.println( "AssignExp:" );
@@ -23,6 +25,7 @@ public class ShowTreeVisitor implements AbsynVisitor {
     exp.rhs.accept( this, level );
   }
 
+  // If Expression
   public void visit( IfExp exp, int level ) {
     indent( level );
     System.out.println( "IfExp:" );
@@ -32,12 +35,14 @@ public class ShowTreeVisitor implements AbsynVisitor {
     if (exp.elsepart != null )
        exp.elsepart.accept( this, level );
   }
-
+  
+  // Int Expression
   public void visit( IntExp exp, int level ) {
     indent( level );
     System.out.println( "IntExp: " + exp.value ); 
   }
 
+  // Operation Expression
   public void visit( OpExp exp, int level ) {
     indent( level );
     System.out.print( "OpExp:" ); 
@@ -71,6 +76,25 @@ public class ShowTreeVisitor implements AbsynVisitor {
     exp.right.accept( this, level );
   }
 
+  // Variable
+  public void visit( Var exp, int level ) {
+    indent( level );
+    System.out.println( "VarExp: " + exp.name );
+  }
+
+  // Variable Declaration
+  public void visit( VarDecl exp, int level ) {
+    indent( level );
+    System.out.println( "VarExp: " + exp.name );
+  }
+
+  // Variable Declaration List
+  public void visit( VarDeclList exp, int level ) {
+    indent( level );
+    System.out.println( "VarExp: " + exp.name );
+  }
+
+  // Variable Expression
   public void visit( VarExp exp, int level ) {
     indent( level );
     System.out.println( "VarExp: " + exp.name );
