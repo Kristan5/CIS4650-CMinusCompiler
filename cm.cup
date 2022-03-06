@@ -70,15 +70,43 @@ parser code {:
 
 /* ------------Declaration of Terminals and Non Terminals Section----------- */
    
+/* ------------- ------------- TERMINALS ------------- ------------- */
+
 terminal IF, ELSE, INT, RETURN, VOID, WHILE;
 terminal PLUS, MINUS, TIMES, OVER, LT, LTE, GT, GTE, EQEQ, NOTEQ, EQ;
 terminal SEMI, COMMA, LPAREN, RPAREN, LSQBRAC, RSQBRAC,LBRAC,RBRAC, NUM, ID;
 terminal ERROR;
-   
-non terminal program;
+
+/* ------------- ------------- NON-TERMINALS ------------- ------------- */
+
+/* DECLIST is the same as ExpList from the tiny example which will use the
+   DEC class which is the same as the Exp calss from tiny example */
+non terminal Dec decl, fun_decl;
+non terminal DecList program, decl_list;
+non terminal VarDec var_dec;
 
 /* ----------------------------Grammar Section-------------------- */
    
 start with program;
 
-program	     ::= ;
+program        ::=   decl_list: decList
+                     {:RESULT = decList;:}
+               ;
+
+decl_list      ::=   decl_list: decList
+                     declaration: dec
+                                          /* WRITE THE RESULTS*/
+               |     declaration: dec
+                                          /* WRITE TEH RESULTS */
+               ;
+
+declaration    ::=   var_dec: varDec
+                     {:RESULT = varDec;:}
+               |     fun_decl: funDec
+                     {:RESULT = funDec;:}
+               ;
+
+var_dec        ::=   INT ID:  id
+                     {:RESULT = id;:}     /* WRITE THE RESULT */
+               |     INT ID: id2
+                     {:RESULT = id2;:}    /* WRITE THE RESULT */
