@@ -162,7 +162,7 @@ param_list  ::= param_list:pl COMMA param:p
              | error:e
                {: 
                   parser.report_error("Invalid syntax: function declaration parameters", e);
-                  // RESULT = new ERRRO????
+                  RESULT = new VarDecList(p, null); // ERROR
                :}
              ;
 
