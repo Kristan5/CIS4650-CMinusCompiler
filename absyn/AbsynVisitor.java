@@ -14,7 +14,7 @@ public interface AbsynVisitor {
   
   public void visit( Exp exp, int level );
 
-  public void visit( FunctionExp exp, int level );
+  public void visit( FunctionDec exp, int level );
 
   // public void visit( IfExp exp, int level );
 

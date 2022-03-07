@@ -7,4 +7,7 @@ public class SimpleDec extends VarDec {
 		this.type = type;
 		this.name = name;
 	}
+	public void accept( AbsynVisitor visitor, int level ) {
+		visitor.visit( this, level );
+	}
 }

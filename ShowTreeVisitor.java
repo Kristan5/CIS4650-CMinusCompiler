@@ -76,34 +76,37 @@ public class ShowTreeVisitor implements AbsynVisitor {
     exp.right.accept( this, level );
   }
 
+  // Call Expression
   public void visit( CallExp exp, int level ) {
 
   }
 
   // Declaration List Expression
-  // public void visit ( DecList decList, int level) {
-  //   while(decList != null) {
-  //     if(decList.head != null){
-  //       decList.head.accept(this, level); 
-  //     }
-  //     decList = decList.tail;
-  //   }
-  // }
+  public void visit( DecList decList, int level) {
+    while(decList != null) {
+      if(decList.head != null){
+        decList.head.accept(this, level); 
+      }
+      decList = decList.tail;
+    }
+  }
   
   // Declaration
-  // public void visit ( Dec decl, int level) {
-  //   indent(level);
-  //   System.out.println("Declaration: " + decl);
-  //   level++;
-  //   decl.lhs.accept(this, level);
-  //   decl.rhs.accept(this, level);
-  // }
+  public void visit( Dec decl, int level) {
+    // indent(level);
+    // System.out.println("Declaration: " + decl);
+    // level++;
+    // decl.lhs.accept(this, level);
+    // decl.rhs.accept(this, level);
+  }
 
+  // Expression
   public void visit( Exp exp, int level ) {
 
   }
 
-  public void visit( FunctionExp exp, int level ) {
+  // Function Expression
+  public void visit( FunctionDec exp, int level ) {
 
   }
 
@@ -115,18 +118,22 @@ public class ShowTreeVisitor implements AbsynVisitor {
     exp.index.accept(this, level);
   }
   
+  // Nil Expression
   public void visit( NilExp exp, int level ) {
 
   }
 
+  // Return Expression
   public void visit( ReturnExp exp, int level ) {
 
   }
 
+  // Simple Declaration
   public void visit( SimpleDec exp, int level ) {
 
   }
 
+  // Simple Variable
   public void visit( SimpleVar exp, int level ) {
 
   }
@@ -151,6 +158,7 @@ public class ShowTreeVisitor implements AbsynVisitor {
 
   }
 
+  // While Expression
   public void visit( WhileExp exp, int level ) {
 
   }

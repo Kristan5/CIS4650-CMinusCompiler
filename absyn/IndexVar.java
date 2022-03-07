@@ -1,10 +1,12 @@
 package absyn;
 
 public class IndexVar extends Var {
-    public String index;
+    public Exp index;
     public String name;
+    public int row; 
+    public int col; 
 
-    public IndexVar(int row, ind col, String name, Exp index) {
+    public IndexVar(int row, int col, String name, Exp index) {
         this.row = row;
         this.col = col;
         this.name = name;

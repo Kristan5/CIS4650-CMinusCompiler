@@ -82,18 +82,17 @@ terminal ERROR;
    
 non terminal Dec decl, fun_decl;
 non terminal DecList program, decl_list;
-non terminal VarDec param, var_decl;
-non terminal Type type;
-
-// REMOVE //
-non terminal VarDecList param_list, local_decls;
-non terminal ExpList stmt_list, args, arg_list;
 
 non terminal Var var;
+non terminal VarDec param, var_decl;
+non terminal VarDecList param_list, local_decls;
+
+non terminal Type type;
 
 non terminal Exp compound_stmt, stmt, expr_stmt, selection_stmt, iteration_stmt, return_stmt;
 non terminal Exp expr, call;
 non terminal Exp if_stmt;
+non terminal ExpList stmt_list, args, arg_list;
 
 /* ---------------------------- ----------------------------*/
 
@@ -144,6 +143,12 @@ var_decl    ::= type:t ID:i SEMI
             //     {: parser.report_error("Invalid syntax: variable declaration", e);
             //         :}
               ;
+
+fun_decl    ::= type:t ID:i LPAREN parm_list:p RPAREN compound_stmt:c
+                {: RESULT = new FunctionDec(tleft, t, i, p, c) :}
+              | type:t ID:i LPAREN VOID RPAREN compound_stmt:c
+                {: RESULT = new FunctionDec(tleft, t, i, null, c) :}
+               ;
 
 type           ::= INT:i
                     {: RESULT = new Type(ileft, Type.INT); :}

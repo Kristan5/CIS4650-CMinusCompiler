@@ -9,4 +9,7 @@ public class ArrayDec extends VarDec {
 		this.name = name;
 		this.size = size;
 	}  
+	public void accept( AbsynVisitor visitor, int level ) {
+		visitor.visit( this, level );
+	}
 }
