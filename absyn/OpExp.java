@@ -10,6 +10,8 @@ public class OpExp extends Exp {
   public final static int LT    = 6;
   public final static int GT    = 7;
   public final static int NOTEQ = 8;
+  public final static int LTE = 9;
+  public final static int GTE = 10;
 
   public Exp left;
   public int op;

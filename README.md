@@ -6,28 +6,29 @@
 ### 4. /absyn classes (MOSTLY DONE)
 ### 5. absyn/AbsynVisitor.java (DONE)
  
- - [x]  ArrayDec
- - [x]  AssignExp
- - [x]  CallExp
- - [x]  Dec
+ ShowTreeVisitor: 
+ - [ ]  ArrayDec
+ - [ ]  AssignExp
+ - [ ]  CallExp
+ - [ ]  Dec
  - [x]  DecList
- - [x]  Exp
+ - [ ]  Exp
  - [x]  ExpList
- - [x]  FunctionDec
+ - [ ]  FunctionDec
  - [x]  IfExp
  - [x]  IndexVar
  - [x]  IntExp
- - [x]  NilExp
+ - [ ]  NilExp
  - [x]  OpExp
- - [x]  ReturnExp
- - [x]  SimpleDec
- - [x]  SimpleVar
- - [x]  Type
- - [x]  Var
- - [x]  VarDec
- - [x]  VarDecList
- - [x]  VarExp
- - [x]  WhileExp
+ - [ ]  ReturnExp
+ - [ ]  SimpleDec
+ - [ ]  SimpleVar
+ - [ ]  Type
+ - [ ]  Var
+ - [ ]  VarDec
+ - [ ]  VarDecList
+ - [ ]  VarExp
+ - [ ]  WhileExp
 
 ## TODO: 
 - Add error RESULT after each '''parser.report_error()'''

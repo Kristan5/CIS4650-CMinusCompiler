@@ -202,6 +202,10 @@ expr         ::= expr:e1 PLUS expr:e2
                  {: RESULT = new OpExp(e1left, e1right, e1, OpExp.EQEQ, e2); :}
                 | expr:e1 NOTEQ expr:e2
                  {: RESULT = new OpExp(e1left, e1right, e1, OpExp.NOTEQ, e2); :}
+                | expr:e1 LTE expr:e2
+                 {: RESULT = new OpExp(e1left, e1right, e1, OpExp.LTE, e2); :}
+                | expr:e1 GTE expr:e2
+                 {: RESULT = new OpExp(e1left, e1right, e1, OpExp.GTE, e2); :}
                 | expr:e1 LT expr:e2
                  {: RESULT = new OpExp(e1left, e1right, e1, OpExp.LT, e2); :}
                 | expr:e1 GT expr:e2
