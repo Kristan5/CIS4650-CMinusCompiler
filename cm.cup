@@ -230,7 +230,7 @@ var         ::= ID:i
                   {: RESULT = new IndexVar(ileft, iright, i, e); :}
                | ID:i LSQBRAC error:e RSQBRAC
                   {: parser.report_error("Invalid expression in Index Variable", e);
-                     /*ERROR REPORTING*/ :}
+                     RESULT = new IndexVar(left, iright, i, e) /*ERROR REPORTING*/ :}
                ;
 
 call        ::= ID:i  LPAREN  args:a  RPAREN
@@ -263,7 +263,8 @@ expr_stmt      ::= expr:e SEMI
                  | SEMI:s
                    {: RESULT = new NilExp(sleft); :}
                  | error:e 
-                   {: parser.report_error("Syntax error: expression statement", e); :}
+                   {: parser.report_error("Syntax error: expression statement", e); 
+                      RESULT = new NilExp(sleft); /* DOUBLE CHECK*/ :}
                   ;
 
 if_or_else_stmt    ::= IF:i LPAREN expr:e RPAREN stmt:s
