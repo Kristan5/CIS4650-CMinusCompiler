@@ -276,7 +276,8 @@ if_or_else_stmt    ::= IF:i LPAREN expr:e RPAREN stmt:s
 iterative_stmt       ::= WHILE:w LPAREN expr:e RPAREN stmt:s
                          {: RESULT = new WhileExp(wleft, wright, e, s); :}
                         | WHILE:w LPAREN error:e RPAREN stmt:s
-                         {: parser.report_error("Invalid expression: while statement", e); :}
+                         {: parser.report_error("Invalid expression: while statement", e); 
+                            RESULT = new WhileExp(wleft, wright, e, s); /*DOUBLE CHECK*/:}
                         ;
 
 return_stmt          ::= RETURN:r expr:e SEMI
