@@ -1,102 +1,11 @@
 
 ## Development Steps:
 ### 1. cm.flex (DONE)
- - [x]  ArrayDec
- - [x]  AssignExp
- - [x]  CallExp
- - [x]  Dec
- - [x]  DecList
- - [x]  Exp
- - [x]  ExpList
- - [x]  FunctionDec
- - [x]  IfExp
- - [x]  IndexVar
- - [x]  IntExp
- - [x]  NilExp
- - [x]  OpExp
- - [x]  ReturnExp
- - [x]  SimpleDec
- - [x]  SimpleVar
- - [x]  Type
- - [x]  Var
- - [x]  VarDec
- - [x]  VarDecList
- - [x]  VarExp
- - [x]  WhileExp
-
-### 2. cm.cup 
- - [ ]  ArrayDec
- - [ ]  AssignExp
- - [ ]  CallExp
- - [x]  Dec
- - [x]  DecList
- - [ ]  Exp
- - [ ]  ExpList
- - [x]  FunctionDec
- - [ ]  IfExp
- - [ ]  IndexVar
- - [ ]  IntExp
- - [ ]  NilExp
- - [ ]  OpExp
- - [ ]  ReturnExp
- - [ ]  SimpleDec
- - [ ]  SimpleVar
- - [x]  Type
- - [ ]  Var
- - [x]  VarDec
- - [ ]  VarDecList
- - [ ]  VarExp
- - [ ]  WhileExp
-
-### 3. ShowTreeVisitor.java
- - [ ]  ArrayDec
- - [ ]  AssignExp
- - [ ]  CallExp
- - [ ]  Dec
- - [ ]  DecList
- - [ ]  Exp
- - [ ]  ExpList
- - [ ]  FunctionDec
- - [ ]  IfExp
- - [ ]  IndexVar
- - [ ]  IntExp
- - [ ]  NilExp
- - [ ]  OpExp
- - [ ]  ReturnExp
- - [ ]  SimpleDec
- - [ ]  SimpleVar
- - [ ]  Type
- - [ ]  Var
- - [ ]  VarDec
- - [ ]  VarDecList
- - [ ]  VarExp
- - [ ]  WhileExp
-
+### 2. cm.cup
+### 3. ShowTreeVisitor.java 
 ### 4. /absyn - [ ]  and classes within it
- - [ ]  ArrayDec
- - [ ]  AssignExp
- - [ ]  CallExp
- - [ ]  Dec
- - [ ]  DecList
- - [ ]  Exp
- - [ ]  ExpList
- - [ ]  FunctionDec
- - [ ]  IfExp
- - [ ]  IndexVar
- - [ ]  IntExp
- - [ ]  NilExp
- - [ ]  OpExp
- - [ ]  ReturnExp
- - [ ]  SimpleDec
- - [ ]  SimpleVar
- - [ ]  Type
- - [ ]  Var
- - [ ]  VarDec
- - [ ]  VarDecList
- - [ ]  VarExp
- - [ ]  WhileExp
-
 ### 5. absyn/AbsynVisitor.java
+ 
  - [x]  ArrayDec
  - [x]  AssignExp
  - [x]  CallExp
@@ -119,7 +28,6 @@
  - [x]  VarDecList
  - [x]  VarExp
  - [x]  WhileExp
-
 
 ## TODO: 
 - Add error RESULT after each '''parser.report_error()'''
