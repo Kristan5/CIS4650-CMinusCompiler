@@ -1,5 +1,5 @@
 import java.io.InputStreamReader;
-// import java_cup.runtime.Symbol;
+import java_cup.runtime.Symbol;
 
 public class Scanner {
   private Lexer scanner = null;
