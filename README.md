@@ -9,7 +9,7 @@
  ShowTreeVisitor: 
  - [ ]  ArrayDec
  - [ ]  AssignExp
- - [ ]  CallExp
+ - [x]  CallExp
  - [ ]  Dec
  - [x]  DecList
  - [ ]  Exp
@@ -18,11 +18,11 @@
  - [x]  IfExp
  - [x]  IndexVar
  - [x]  IntExp
- - [ ]  NilExp
+ - [x]  NilExp
  - [x]  OpExp
- - [ ]  ReturnExp
+ - [x]  ReturnExp
  - [ ]  SimpleDec
- - [ ]  SimpleVar
+ - [x]  SimpleVar
  - [ ]  Type
  - [ ]  Var
  - [ ]  VarDec

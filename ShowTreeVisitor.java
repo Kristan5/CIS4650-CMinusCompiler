@@ -16,6 +16,14 @@ public class ShowTreeVisitor implements AbsynVisitor {
     } 
   }
 
+  // ArrayDec
+  public void visit( ArrayDec expList, int level ) {
+    // indent( level );
+    // if (expList.size != null)
+    //   System.out.println("ArrayDec: " + expList.);
+    
+  }
+
   // Assign Expression
   public void visit( AssignExp exp, int level ) {
     indent( level );
@@ -88,7 +96,11 @@ public class ShowTreeVisitor implements AbsynVisitor {
 
   // Call Expression
   public void visit( CallExp exp, int level ) {
-
+    indent( level ); 
+    System.out.println("CallExp: " + exp.function);
+    level ++; 
+    if (exp.args != null)
+      exp.args.accept(this, level);
   }
 
   // Declaration List Expression
@@ -130,23 +142,39 @@ public class ShowTreeVisitor implements AbsynVisitor {
   
   // Nil Expression
   public void visit( NilExp exp, int level ) {
-
+    indent( level );
+    System.out.println( "NilExp" ); 
   }
 
   // Return Expression
   public void visit( ReturnExp exp, int level ) {
-
+    indent( level );
+    System.out.println("ReturnExp: ");
+    level ++; 
+    if (exp.test != null)
+      exp.test.accept(this, level);
   }
 
   // Simple Declaration
   public void visit( SimpleDec exp, int level ) {
 
   }
-
+  
   // Simple Variable
   public void visit( SimpleVar exp, int level ) {
-
+    indent( level );
+    System.out.println( "SimpleVar: " + exp.name ); 
   }
+  
+  public void visit( Type exp, int level ) {
+    System.out.println("TYPE: ");
+    
+    if (exp.type == Type.INT)
+      System.out.println("Type: INTEGER");
+    else 
+      System.out.println("Type: VOID");
+  }
+  
 
   // Variable
   public void visit( Var exp, int level ) {
