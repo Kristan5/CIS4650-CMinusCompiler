@@ -162,7 +162,7 @@ param_list  ::= param_list:pl COMMA param:p
              | error:e
                {: 
                   parser.report_error("Invalid syntax: function declaration parameters", e);
-                  RESULT = new VarDecList(p, null); // ERROR
+                  // RESULT = new VarDecList(p, null); // ERROR
                :}
              ;
 
@@ -230,7 +230,8 @@ var         ::= ID:i
                   {: RESULT = new IndexVar(ileft, iright, i, e); :}
                | ID:i LSQBRAC error:e RSQBRAC
                   {: parser.report_error("Invalid expression in Index Variable", e);
-                     RESULT = new IndexVar(left, iright, i, e) /*ERROR REPORTING*/ :}
+                     // RESULT = new IndexVar(left, iright, i, e); /*ERROR REPORTING*/ 
+                  :}
                ;
 
 call        ::= ID:i  LPAREN  args:a  RPAREN
@@ -255,7 +256,8 @@ args_list   ::= arg_list:al COMMA expr:e
                   {:  RESULT = new ExpList(e, null);  :}
                | error:e
                   {: parser.report_error("Invalid syntax in function arguments", e);
-                     RESULT = new ExpList(new ErrorExp(eleft), null); :}
+                     // RESULT = new ExpList(new ErrorExp(eleft), null); 
+                  :}
                ;
 
 expr_stmt      ::= expr:e SEMI
@@ -264,7 +266,8 @@ expr_stmt      ::= expr:e SEMI
                    {: RESULT = new NilExp(sleft); :}
                  | error:e 
                    {: parser.report_error("Syntax error: expression statement", e); 
-                      RESULT = new NilExp(sleft); /* DOUBLE CHECK*/ :}
+                     //  RESULT = new NilExp(sleft); /* DOUBLE CHECK*/ 
+                      :}
                   ;
 
 if_or_else_stmt    ::= IF:i LPAREN expr:e RPAREN stmt:s
@@ -277,7 +280,8 @@ iterative_stmt       ::= WHILE:w LPAREN expr:e RPAREN stmt:s
                          {: RESULT = new WhileExp(wleft, wright, e, s); :}
                         | WHILE:w LPAREN error:e RPAREN stmt:s
                          {: parser.report_error("Invalid expression: while statement", e); 
-                            RESULT = new WhileExp(wleft, wright, e, s); /*DOUBLE CHECK*/:}
+                           //  RESULT = new WhileExp(wleft, wright, e, s); /*DOUBLE CHECK*/
+                         :}
                         ;
 
 return_stmt          ::= RETURN:r expr:e SEMI
