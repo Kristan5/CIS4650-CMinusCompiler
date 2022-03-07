@@ -2,13 +2,13 @@ package absyn;
 
 public class WhileExp extends Exp {
   public Exp test;
-  public ExpList thenpart;
-  public ExpList elsepart;
+  public Exp block;
 
-  public WhileExp( int row, int col, Exp test, ExpList thenpart, ExpList elsepart ) {
+  public WhileExp( int row, int col, Exp test, Exp block) {
     this.row = row;
     this.col = col;
     this.test = test;
+    this.block = block;
   }
 
   public void accept( AbsynVisitor visitor, int level ) {

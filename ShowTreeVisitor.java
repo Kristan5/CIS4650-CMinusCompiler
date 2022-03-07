@@ -21,8 +21,9 @@ public class ShowTreeVisitor implements AbsynVisitor {
     indent( level );
     System.out.println( "AssignExp:" );
     level++;
-    exp.lhs.accept( this, level );
-    exp.rhs.accept( this, level );
+    // NEED TO FIX THIS 'ShowTreeVisitor.java:24: error: cannot find symbol' on lhs.accept (Add accept to var)
+    // exp.lhs.accept( this, level );
+    // exp.rhs.accept( this, level );
   }
 
   // If Expression
@@ -56,7 +57,7 @@ public class ShowTreeVisitor implements AbsynVisitor {
       case OpExp.TIMES:
         System.out.println( " * " );
         break;
-      case OpExp.OVER:
+      case OpExp.DIVIDE:
         System.out.println( " / " );
         break;
       case OpExp.EQ:

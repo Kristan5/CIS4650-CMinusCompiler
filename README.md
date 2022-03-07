@@ -121,8 +121,11 @@
  - [x]  WhileExp
 
 
-
-
+## TODO: 
+- Add error RESULT after each '''parser.report_error()'''
+  - And other error handling
+- change all '''pos''' to row and col
+- CallExp Class
 
 # Other: 
 
