@@ -80,13 +80,24 @@ public class ShowTreeVisitor implements AbsynVisitor {
 
   }
 
-  public void visit ( DecList decList, int level) {
-
-  }
+  // Declaration List Expression
+  // public void visit ( DecList decList, int level) {
+  //   while(decList != null) {
+  //     if(decList.head != null){
+  //       decList.head.accept(this, level); 
+  //     }
+  //     decList = decList.tail;
+  //   }
+  // }
   
-  public void visit ( Dec decl, int level) {
-
-  }
+  // Declaration
+  // public void visit ( Dec decl, int level) {
+  //   indent(level);
+  //   System.out.println("Declaration: " + decl);
+  //   level++;
+  //   decl.lhs.accept(this, level);
+  //   decl.rhs.accept(this, level);
+  // }
 
   public void visit( Exp exp, int level ) {
 
@@ -96,8 +107,12 @@ public class ShowTreeVisitor implements AbsynVisitor {
 
   }
 
+  // Index Variable
   public void visit( IndexVar exp, int level ) {
-
+    indent(level);
+    System.out.println("Index var: " + exp.name);
+    level++;
+    exp.index.accept(this, level);
   }
   
   public void visit( NilExp exp, int level ) {

@@ -107,6 +107,8 @@ start with program;
 
 program        ::=   decl_list: decList
                      {:RESULT = decList;:}
+               |     ERROR
+                     {:RESULT = null;:}
                ;
 
 decl_list     ::= decl_list:d1 decl:d2 
