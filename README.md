@@ -1,10 +1,10 @@
 
 ## Development Steps:
 ### 1. cm.flex (DONE)
-### 2. cm.cup
-### 3. ShowTreeVisitor.java 
-### 4. /absyn - [ ]  and classes within it
-### 5. absyn/AbsynVisitor.java
+### 2. cm.cup (ERROR HANDLING TODO)
+### 3. ShowTreeVisitor.java  (NOT DONE)
+### 4. /absyn classes (MOSTLY DONE)
+### 5. absyn/AbsynVisitor.java (DONE)
  
  - [x]  ArrayDec
  - [x]  AssignExp
