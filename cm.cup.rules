@@ -97,8 +97,10 @@ non terminal ExpList stmt_list, args, arg_list;
 
 /* ---------------------------- ----------------------------*/
 
+precedence right EQ;
+precedence nonassoc LT, GT, LTE,GTE, EQEQ, NOTEQ;
 precedence left PLUS, MINUS;
-precedence left TIMES, DIVIDE;
+precedence left DIVIDE, TIMES;
 precedence left ELSE;
 
 /* ----------------------------Grammar Section-------------------- */
@@ -139,7 +141,7 @@ param       ::= type:t ID:i
               | type:t ID:i LSQBRAC RSQBRAC
                ;
 
-compound_stmt        ::= LBRAC:c local_decls:l stmt_list:s RBRAC
+compound_stmt        ::= LBRAC local_decls:l stmt_list:s RBRAC
                      ;
 
 local_decls           ::= local_decls:l var_decl:v
@@ -214,8 +216,8 @@ factor      ::= LPAREN expr:e RPAREN
              | NUM:n
             ;
 
-// call        ::= ID:i LPAREN args:a RPAREN
-//                ;
+call        ::= ID:i LPAREN args:a RPAREN
+               ;
 
 args        ::= arg_list:al
                |
