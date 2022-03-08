@@ -91,8 +91,8 @@ non terminal Type type;
 
 non terminal Exp stmt, expr_stmt, compound_stmt, selection_stmt, iteration_stmt, return_stmt;
 non terminal Exp simple_expr, additive_expr;
-non terminal Exp relop, mulop, addop, term, factor;
-non terminal Exp expr, call;
+non terminal Exp relop, mulop, addop, term, factor; // NOT SURE IF THIS IS CORRECT TYPE
+non terminal Exp expr, call; // NOT SURE IF THIS IS CORRECT TYPE
 non terminal Exp if_stmt;
 non terminal ExpList stmt_list, args, arg_list;
 
