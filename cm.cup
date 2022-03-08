@@ -74,7 +74,7 @@ parser code {:
 
 terminal String ID, NUM;
 terminal IF, ELSE, INT, RETURN, VOID, WHILE;
-terminal PLUS, MINUS, TIMES, DIVIDE, OVER, LT, LTE, GT, GTE, EQEQ, NOTEQ, EQ;
+terminal PLUS, MINUS, TIMES, DIVIDE, LT, LTE, GT, GTE, EQEQ, NOTEQ, EQ;
 terminal SEMI, COMMA, LPAREN, RPAREN, LSQBRAC, RSQBRAC,LBRAC,RBRAC;
 terminal ERROR;
 
@@ -93,7 +93,6 @@ non terminal Exp stmt, expr_stmt, compound_stmt, selection_stmt, iteration_stmt,
 non terminal Exp simple_expr, additive_expr;
 non terminal Exp relop, mulop, addop, term, factor; // NOT SURE IF THIS IS CORRECT TYPE
 non terminal Exp expr, call; // NOT SURE IF THIS IS CORRECT TYPE
-non terminal Exp if_stmt;
 non terminal ExpList stmt_list, args, arg_list;
 
 /* ---------------------------- ----------------------------*/
@@ -278,7 +277,7 @@ return_stmt          ::= RETURN:r expr:e SEMI
 expr         ::= var:v EQ expr:e
                  {: RESULT = new AssignExp(vleft, vright, v, e); :}
                 | simple_expr:se
-                 {: RESULT = new SimpleExp(seleft, seright, se):}
+                 {: RESULT = new SimpleExp(seleft, seright, se); :}
                ;
 
                //  | LPAREN expr:e RPAREN
@@ -305,7 +304,7 @@ var         ::= ID:i
                ;
 
 simple_expr    ::= additive_expr:ae1 relop:r additive_expr:ae2
-                  {: RESULT = new SimpleExp(ae1left, ae1right, ae1) :}  
+                  {: RESULT = new SimpleExp(ae1left, ae1right, ae1); :}  
                ;
 
 relop       ::=  expr:e1 EQEQ expr:e2
@@ -328,10 +327,10 @@ additive_expr  ::= additive_expr:ae addop:a term:t
                   {: System.out.println("NOT SURE WHAT DO TO HERE"); :}
                ;
 
-addop    ::= expr:e1 PLUS expr:e2
-            {: RESULT = new OpExp(e1left, e1right, e1, OpExp.PLUS, e2); :}
-            | expr:e1 MINUS expr:e2
-            {: RESULT = new OpExp(e1left, e1right, e1, OpExp.MINUS, e2); :}
+addop    ::= PLUS
+            // {: RESULT = new OpExp(e1left, e1right, e1, OpExp.PLUS, e2); :}
+            | MINUS 
+            // {: RESULT = new OpExp(e1left, e1right, e1, OpExp.MINUS, e2); :}
             ;
 
 term     ::= term:t mulop:m factor:f
@@ -340,10 +339,10 @@ term     ::= term:t mulop:m factor:f
             {: System.out.println("NOT SURE WHAT DO TO HERE"); :}
             ;
 
-mulop    ::= expr:e1 TIMES expr:e2
-            {: RESULT = new OpExp(e1left, e1right, e1, OpExp.TIMES, e2); :}
-            | expr:e1 DIVIDE expr:e2
-            {: RESULT = new OpExp(e1left, e1right, e1, OpExp.DIVIDE, e2); :}
+mulop    ::= TIMES
+            // {: RESULT = new OpExp(e1left, e1right, e1, OpExp.TIMES, e2); :}
+            | DIVIDE 
+            // {: RESULT = new OpExp(e1left, e1right, e1, OpExp.DIVIDE, e2); :}
             ;
 
 factor      ::= LPAREN expr:e RPAREN
@@ -353,7 +352,7 @@ factor      ::= LPAREN expr:e RPAREN
              | call:c
                {: System.out.println("NOT SURE WHAT DO TO HERE"); :}
              | NUM:n
-               {: RESULT = new IntExp(nleft, nright, Integer.parseInt(n) :}
+               {: RESULT = new IntExp(nleft, nright, Integer.parseInt(n)); :}
             ;
 
 call        ::= ID:i  LPAREN  args:a  RPAREN

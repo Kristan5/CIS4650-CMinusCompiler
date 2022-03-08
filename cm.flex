@@ -107,7 +107,7 @@ comment =  \/\/.*|\/\*(.|LineTerminator)*\*\/
 "+"                { return symbol(sym.PLUS); }
 "-"                { return symbol(sym.MINUS); }
 "*"                { return symbol(sym.TIMES); }
-"/"                { return symbol(sym.OVER); }
+"/"                { return symbol(sym.DIVIDE); }
 "<"                { return symbol(sym.LT); }
 "<="               { return symbol(sym.LTE); }      /***** ADD THIS TO SYMBOL *****/
 ">"                { return symbol(sym.GT); }

@@ -12,8 +12,8 @@ all: Main.class
 test: 
 	make clean 
 	make
-	# java -cp /usr/share/java/cup.jar:. Main testFiles/fac.cm
-	java -cp /usr/share/java/cup.jar:. Main testFiles/fac_simple.cm
+	java -cp /usr/share/java/cup.jar:. Main testFiles/fac.cm
+	# java -cp /usr/share/java/cup.jar:. Main testFiles/fac_simple.cm
 
 remake: 
 	make clean
@@ -27,9 +27,9 @@ Main.class: absyn/*.java parser.java sym.java Lexer.java ShowTreeVisitor.java Sc
 Lexer.java: cm.flex
 	$(JFLEX) cm.flex
 
-parser.java: cm.cup
-	#$(CUP) -dump -expect 3 cm.cup
-	$(CUP) -expect 3 cm.cup
+parser.java: cm.cup.rules
+	#$(CUP) -dump -expect 3 cm.cup.rules
+	$(CUP) -expect 3 cm.cup.rules
 
 clean:
 	rm -f parser.java Lexer.java sym.java *.class absyn/*.class *~
