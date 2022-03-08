@@ -20,14 +20,14 @@ public class ShowTreeVisitor implements AbsynVisitor {
   public void visit( ArrayDec expList, int level ) {
     // indent( level );
     // if (expList.size != null)
-    //   System.out.println("ArrayDec: " + expList.);
+    System.out.println("ArrayDec: " + expList.name);
     
   }
 
   // Assign Expression
   public void visit( AssignExp exp, int level ) {
     indent( level );
-    System.out.println( "AssignExp:" );
+    System.out.println( "AssignExp:");
     level++;
     // NEED TO FIX THIS 'ShowTreeVisitor.java:24: error: cannot find symbol' on lhs.accept (Add accept to var)
     // exp.lhs.accept( this, level );
@@ -116,7 +116,7 @@ public class ShowTreeVisitor implements AbsynVisitor {
   // Declaration
   public void visit( Dec decl, int level) {
     // indent(level);
-    // System.out.println("Declaration: " + decl);
+    System.out.println("Declaration: " + decl);
     // level++;
     // decl.lhs.accept(this, level);
     // decl.rhs.accept(this, level);
@@ -124,12 +124,12 @@ public class ShowTreeVisitor implements AbsynVisitor {
 
   // Expression
   public void visit( Exp exp, int level ) {
-
+    System.out.println("Exp: " + exp);
   }
 
   // Function Expression
   public void visit( FunctionDec exp, int level ) {
-
+    System.out.println("FunctionDec: " + exp.function);
   }
 
   // Index Variable
