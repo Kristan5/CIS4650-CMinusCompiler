@@ -107,7 +107,7 @@ precedence left ELSE;
 
 start with program;
 
-program        ::=   decl_list:decList
+program        ::= decl_list:decList
                ;
 
 decl_list     ::= decl_list:d1 decl:d2 
@@ -122,11 +122,11 @@ var_decl    ::= type:t ID:i SEMI
               | type:t ID:i LSQBRAC NUM:n RSQBRAC SEMI
               ;
 
-type           ::= INT:i
-                  | VOID:v
+type           ::= INT
+                  | VOID
                   ;
 
-fun_decl    ::= type:t ID:i LPAREN params:p RPAREN compound_stmt:c
+fun_decl    ::= type:t ID:i LPAREN params RPAREN compound_stmt:c
                ;
 
 params       ::= param_list:pl 
@@ -186,12 +186,12 @@ simple_expr    ::= additive_expr:ae1 relop:r additive_expr:ae2
                 | additive_expr
                ;
 
-relop       ::=  expr:e1 EQEQ expr:e2
-                | expr:e1 NOTEQ expr:e2
-                | expr:e1 LTE expr:e2
-                | expr:e1 GTE expr:e2
-                | expr:e1 LT expr:e2
-                | expr:e1 GT expr:e2
+relop       ::=  EQEQ
+                | NOTEQ
+                | LTE
+                | GTE
+                | LT
+                | GT
                ;
 
 additive_expr  ::= additive_expr:ae addop:a term:t 
