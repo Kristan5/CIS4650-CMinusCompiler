@@ -1,4 +1,16 @@
-int x; 
-int fac;
+/* Test 1 - no errors  - Basic Arithmetic and assignment*/
 
-x = 2;
+void main(void) 
+{
+	int x;
+	int y;
+	int z;
+	
+	y = 10;
+	x = 2;
+	z = (100 + (y * x)) / 2; /* should be 60 */
+	
+	output(z);
+	
+    
+}

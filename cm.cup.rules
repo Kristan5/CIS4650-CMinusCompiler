@@ -69,41 +69,24 @@ parser code {:
 :};
 
 /* ------------Declaration of Terminals and Non Terminals Section----------- */
-   
-/* ------------- ------------- TERMINALS ------------- ------------- */
 
-terminal String ID, NUM;
 terminal IF, ELSE, INT, RETURN, VOID, WHILE;
-terminal PLUS, MINUS, TIMES, DIVIDE, LT, LTE, GT, GTE, EQEQ, NOTEQ, EQ;
-terminal SEMI, COMMA, LPAREN, RPAREN, LSQBRAC, RSQBRAC,LBRAC,RBRAC;
+terminal ASSIGN, EQ, LT, GT, PLUS, MINUS, TIMES, DIVIDE, LPAREN, RPAREN, SEMI, LTE, GTE, EQEQ, NOTEQ, COMMA, LSQBRAC, RSQBRAC, LBRAC, RBRAC;
+terminal String ID;
+terminal Integer NUM;
 terminal ERROR;
 
-/* ------------- ------------- NON-TERMINALS ------------- ------------- */
-   
-non terminal Dec decl, fun_decl;
 non terminal DecList program, decl_list;
+non terminal VarDecList params, param_list, local_decls;
+non terminal ExpList stmt_list, arg_list, args;
+non terminal Type type;
+non terminal Integer relop, addop, mulop;
 
 non terminal Var var;
-non terminal VarDec param, var_decl, params;
-non terminal VarDecList param_list, local_decls;
-
-non terminal Type type;
-
-non terminal Exp stmt, expr_stmt, compound_stmt, selection_stmt, iteration_stmt, return_stmt;
-non terminal Exp simple_expr, additive_expr;
-non terminal Exp relop, mulop, addop, term, factor; // NOT SURE IF THIS IS CORRECT TYPE
-non terminal Exp expr, call; // NOT SURE IF THIS IS CORRECT TYPE
-non terminal ExpList stmt_list, args, arg_list;
-
-/* ---------------------------- ----------------------------*/
-
-precedence right EQ;
-precedence nonassoc LT, GT, LTE,GTE, EQEQ, NOTEQ;
-precedence left PLUS, MINUS;
-precedence left DIVIDE, TIMES;
-precedence left ELSE;
-
-/* ----------------------------Grammar Section-------------------- */
+non terminal Exp factor, call, simple_expr, additive_expr, term, expr, selection_stmt, iteration_stmt, return_stmt, stmt, expr_stmt;
+non terminal CompoundExp compound_stmt;
+non terminal Dec fun_decl, decl;
+non terminal VarDec param, var_decl;
 
 start with program;
 

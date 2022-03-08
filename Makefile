@@ -13,8 +13,8 @@ test:
 	make clean 
 	make
 	# java -cp /usr/share/java/cup.jar:. Main testFiles/fac.cm
-	# java -cp /usr/share/java/cup.jar:. Main testFiles/fac_simple.cm
-	java -cp /usr/share/java/cup.jar:. Main testFiles/gcd.cm
+	java -cp /usr/share/java/cup.jar:. Main testFiles/fac_simple.cm
+	# java -cp /usr/share/java/cup.jar:. Main testFiles/gcd.cm
 
 remake: 
 	make clean
@@ -28,9 +28,9 @@ Main.class: absyn/*.java parser.java sym.java Lexer.java ShowTreeVisitor.java Sc
 Lexer.java: cm.flex
 	$(JFLEX) cm.flex
 
-parser.java: cm.cup.rules
-	#$(CUP) -dump -expect 3 cm.cup.rules
-	$(CUP) -expect 3 cm.cup.rules
+parser.java: cm.cup.copyrules
+	#$(CUP) -dump -expect 3 cm.cup.copyrules
+	$(CUP) -expect 3 cm.cup.copyrules
 
 clean:
 	rm -f parser.java Lexer.java sym.java *.class absyn/*.class *~
