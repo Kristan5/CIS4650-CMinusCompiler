@@ -1,2 +1,4 @@
-int x; int fac;
+int x; 
+int fac;
+
 x = 2;

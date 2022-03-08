@@ -89,7 +89,9 @@ non terminal VarDecList param_list, local_decls;
 
 non terminal Type type;
 
-non terminal Exp stmt, expr_stmt, compound_stmt, if_or_else_stmt, iterative_stmt, return_stmt;
+non terminal Exp stmt, expr_stmt, compound_stmt, selection_stmt, iteration_stmt, return_stmt;
+non terminal Exp simple_expr, additive_expr;
+non terminal Exp relop, mulop, addop, term, factor;
 non terminal Exp expr, call;
 non terminal Exp if_stmt;
 non terminal ExpList stmt_list, args, arg_list;
@@ -134,7 +136,7 @@ decl           ::= var_decl:i
                   ;
 
 var_decl    ::= type:t ID:i SEMI
-                {:  System.out.println("VAR DECL");
+                {: System.out.println("VAR DECL");
                 RESULT = new SimpleDec(tleft, t, i); :}
               | type:t ID:i LSQBRAC NUM:n RSQBRAC SEMI
                 {: System.out.println("VAR DECL");
@@ -143,9 +145,17 @@ var_decl    ::= type:t ID:i SEMI
                 {: parser.report_error("Invalid syntax: array declaration", e);
                     :}
               | type:t error:e SEMI
-                {: parser.report_error("Invalid syntax: variable declaration", e);
+                {: System.out.println("Type: " + t);
+                parser.report_error("Invalid syntax: variable declaration", e);
                     :}
               ;
+
+type           ::= INT:i
+                    {: RESULT = new Type(ileft, Type.INT); :}
+                  | VOID:v
+                    {: System.out.println("VOID GRAMMAR");
+                    RESULT = new Type(vleft, Type.VOID); :}
+                  ;
 
 fun_decl    ::= type:t ID:i LPAREN param_list:p RPAREN compound_stmt:c
                 {: System.out.println("Function Declared");
@@ -154,6 +164,13 @@ fun_decl    ::= type:t ID:i LPAREN param_list:p RPAREN compound_stmt:c
                 {: System.out.println("Function Declared");
                 RESULT = new FunctionDec(tleft, tright, t, i, null, c); :}
                ;
+
+// params       ::= param_list:pl 
+//                  {:  :}
+//                | VOID:v 
+//                  {: :}
+//                | error:e
+//                  {:  :}
 
 param_list  ::= param_list:pl COMMA param:p
                {: VarDecList decList = pl; 
@@ -179,34 +196,119 @@ param       ::= type:t ID:i
                 {: RESULT = new ArrayDec(tleft, t, i, null); :}
                ;
 
-type           ::= INT:i
-                    {: RESULT = new Type(ileft, Type.INT); :}
-                  | VOID:v
-                    {: System.out.println("VOID GRAMMAR");
-                    RESULT = new Type(vleft, Type.VOID); :}
-                  ;
+compound_stmt        ::= LBRAC:c local_decls:l stmt_list:s RBRAC
+                         {: RESULT = new CompoundExp(cleft, cright, l, s); :}
+                       | LBRAC:c  stmt_list:s RBRAC
+                         {:  RESULT = new CompoundExp(cleft, cright, null, s);  :}
+                       | LBRAC:c local_decls:l RBRAC
+                         {:  RESULT = new CompoundExp(cleft, cright, l, null);  :}
+                       | LBRAC:c  RBRAC
+                         {:  RESULT = new CompoundExp(cleft, cright, null, null);  :}
+                     ;
+
+local_decls           ::= local_decls:l var_decl:v
+                        {:
+                           System.out.println("LOCALDECLS");
+                           VarDecList decs = l;
+                           while (decs.tail != null)
+                              decs = decs.tail;
+                           decs.tail = new VarDecList(v, null);
+                           RESULT = l;
+                        :}
+                        | var_decl:v
+                           {: System.out.println("LOCALDECLS");
+                           RESULT = new VarDecList(v, null); :}
+                        | error:e var_decl:v
+                           {:System.out.println("LOCALDECLS");
+                           parser.report_error ("Invalid syntax in variable declarations", e);
+                           RESULT = new VarDecList(v, null);
+                           :}
+                        ;
+
+stmt_list   ::= stmt_list:l stmt:s
+                {:
+                  ExpList exps = l;
+                  while (exps.tail != null)
+                    exps = exps.tail;
+                  exps.tail = new ExpList(s, null);
+                  RESULT = l;
+                :}
+              | stmt:s
+                {: RESULT = new ExpList(s, null); :}
+              ;
 
 stmt         ::= expr_stmt:es
                  {: RESULT = es; :}
-               | if_or_else_stmt:ss
-                 {: RESULT = ss; :}
                | compound_stmt:cs
                  {: RESULT = cs; :}
-               | iterative_stmt:is
+               | selection_stmt:ss
+                 {: RESULT = ss; :}
+               | iteration_stmt:is
                  {: RESULT = is; :}
                | return_stmt:rs
                  {: RESULT = rs; :}
                ;
-                
-expr         ::= expr:e1 PLUS expr:e2
-                 {: RESULT = new OpExp(e1left, e1right, e1, OpExp.PLUS, e2); :}
-                | expr:e1 MINUS expr:e2
-                 {: RESULT = new OpExp(e1left, e1right, e1, OpExp.MINUS, e2); :}
-                | expr:e1 TIMES expr:e2
-                 {: RESULT = new OpExp(e1left, e1right, e1, OpExp.TIMES, e2); :}
-                | expr:e1 DIVIDE expr:e2
-                 {: RESULT = new OpExp(e1left, e1right, e1, OpExp.DIVIDE, e2); :}
-                | expr:e1 EQEQ expr:e2
+
+expr_stmt      ::= expr:e SEMI
+                   {: RESULT = e; :}
+                 | SEMI:s
+                   {: RESULT = new NilExp(sleft); :}
+                 | error:e 
+                   {: parser.report_error("Syntax error: expression statement", e); :}
+                  ;
+
+selection_stmt    ::= IF:i LPAREN expr:e RPAREN stmt:s
+                      {: RESULT = new IfExp(ileft, iright, e, s, new NilExp(sleft)); :}
+                    | IF:i LPAREN expr:e RPAREN stmt:s ELSE stmt:se
+                      {: RESULT = new IfExp(ileft, iright, e, s, se); :}
+                    ;
+
+iteration_stmt       ::= WHILE:w LPAREN expr:e RPAREN stmt:s
+                         {: RESULT = new WhileExp(wleft, wright, e, s); :}
+                        | WHILE:w LPAREN error:e RPAREN stmt:s
+                         {: parser.report_error("Invalid expression: while statement", e); :}
+                        ;
+
+return_stmt          ::= RETURN:r expr:e SEMI
+                        {: RESULT = new ReturnExp(rleft, rright, e); :}
+                       | RETURN:r SEMI
+                        {: RESULT = new ReturnExp(rleft, rright, null); :}
+                     ;
+
+expr         ::= var:v EQ expr:e
+                 {: RESULT = new AssignExp(vleft, vright, v, e); :}
+                | simple_expr:se
+                 {: RESULT = new SimpleExp(seleft, seright, se):}
+               ;
+
+               //  | LPAREN expr:e RPAREN
+               //   {: RESULT = e; :}
+               //  | var:v
+               //   {: System.out.println("VAR: " + v);
+               //   RESULT = new VarExp(vleft, vright, v); :}
+               //  | call:c
+               //   {: RESULT = c; :}
+               //  | NUM:n
+               //   {: RESULT = new IntExp(nleft, nright, Integer.parseInt(n)); :}
+               // ;
+
+var         ::= ID:i
+                  {: 
+                  System.out.println("ID: " + i);
+                  RESULT = new SimpleVar(ileft, iright, i); :}
+               | ID:i  LSQBRAC expr:e RSQBRAC
+                  {: System.out.println("ID: " + i);
+                  RESULT = new IndexVar(ileft, iright, i, e); :}
+               | ID:i LSQBRAC error:e RSQBRAC
+                  {: parser.report_error("Invalid expression in Index Variable", e);
+                     /*ERROR REPORTING*/ :}
+               ;
+
+simple_expr    ::= additive_expr:ae1 relop:r additive_expr:ae2
+                  {: RESULT = new SimpleExp(ae1left, ae1right, ae1) :}  
+               ;
+
+relop       ::=  expr:e1 EQEQ expr:e2
                  {: RESULT = new OpExp(e1left, e1right, e1, OpExp.EQEQ, e2); :}
                 | expr:e1 NOTEQ expr:e2
                  {: RESULT = new OpExp(e1left, e1right, e1, OpExp.NOTEQ, e2); :}
@@ -218,30 +320,41 @@ expr         ::= expr:e1 PLUS expr:e2
                  {: RESULT = new OpExp(e1left, e1right, e1, OpExp.LT, e2); :}
                 | expr:e1 GT expr:e2
                  {: RESULT = new OpExp(e1left, e1right, e1, OpExp.GT, e2); :}
-                | expr:e1 EQ expr:e2
-                 {: RESULT = new OpExp(e1left, e1right, e1, OpExp.EQ, e2); :}
-                | var:v EQ expr:e
-                 {: System.out.println("Assigning: " + e);
-                 RESULT = new AssignExp(vleft, vright, v, e); :}
-                | LPAREN expr:e RPAREN
-                 {: RESULT = e; :}
-                | var:v
-                 {: System.out.println("VAR: " + v);
-                 RESULT = new VarExp(vleft, vright, v); :}
-                | call:c
-                 {: RESULT = c; :}
-                | NUM:n
-                 {: RESULT = new IntExp(nleft, nright, Integer.parseInt(n)); :}
                ;
 
-var         ::= ID:i
-                  {: RESULT = new SimpleVar(ileft, iright, i); :}
-               | ID:i  LSQBRAC expr:e RSQBRAC
-                  {: RESULT = new IndexVar(ileft, iright, i, e); :}
-               | ID:i LSQBRAC error:e RSQBRAC
-                  {: parser.report_error("Invalid expression in Index Variable", e);
-                     /*ERROR REPORTING*/ :}
+additive_expr  ::= additive_expr:ae addop:a term:t 
+                  {: System.out.println("NOT SURE WHAT DO TO HERE"); :}
+                 | term:t
+                  {: System.out.println("NOT SURE WHAT DO TO HERE"); :}
                ;
+
+addop    ::= expr:e1 PLUS expr:e2
+            {: RESULT = new OpExp(e1left, e1right, e1, OpExp.PLUS, e2); :}
+            | expr:e1 MINUS expr:e2
+            {: RESULT = new OpExp(e1left, e1right, e1, OpExp.MINUS, e2); :}
+            ;
+
+term     ::= term:t mulop:m factor:f
+            {: System.out.println("NOT SURE WHAT DO TO HERE"); :}
+            | factor:f
+            {: System.out.println("NOT SURE WHAT DO TO HERE"); :}
+            ;
+
+mulop    ::= expr:e1 TIMES expr:e2
+            {: RESULT = new OpExp(e1left, e1right, e1, OpExp.TIMES, e2); :}
+            | expr:e1 DIVIDE expr:e2
+            {: RESULT = new OpExp(e1left, e1right, e1, OpExp.DIVIDE, e2); :}
+            ;
+
+factor      ::= LPAREN expr:e RPAREN
+               {: System.out.println("NOT SURE WHAT DO TO HERE"); :}
+             | var:v
+               {: System.out.println("NOT SURE WHAT DO TO HERE"); :}
+             | call:c
+               {: System.out.println("NOT SURE WHAT DO TO HERE"); :}
+             | NUM:n
+               {: RESULT = new IntExp(nleft, nright, Integer.parseInt(n) :}
+            ;
 
 call        ::= ID:i  LPAREN  args:a  RPAREN
                   {:  RESULT = new CallExp(ileft, iright, i, a);  :}
@@ -267,58 +380,3 @@ args_list   ::= arg_list:al COMMA expr:e
                   {: parser.report_error("Invalid syntax in function arguments", e);
                      RESULT = new ExpList(new ErrorExp(eleft), null); :}
                ;
-
-expr_stmt      ::= expr:e SEMI
-                   {: RESULT = e; :}
-                 | SEMI:s
-                   {: RESULT = new NilExp(sleft); :}
-                 | error:e 
-                   {: parser.report_error("Syntax error: expression statement", e); :}
-                  ;
-
-if_or_else_stmt    ::= IF:i LPAREN expr:e RPAREN stmt:s
-                      {: RESULT = new IfExp(ileft, iright, e, s, new NilExp(sleft)); :}
-                    | IF:i LPAREN expr:e RPAREN stmt:s ELSE stmt:se
-                      {: RESULT = new IfExp(ileft, iright, e, s, se); :}
-                    ;
-
-iterative_stmt       ::= WHILE:w LPAREN expr:e RPAREN stmt:s
-                         {: RESULT = new WhileExp(wleft, wright, e, s); :}
-                        | WHILE:w LPAREN error:e RPAREN stmt:s
-                         {: parser.report_error("Invalid expression: while statement", e); :}
-                        ;
-
-compound_stmt        ::= LBRAC:c local_decls:l stmt_list:s RBRAC
-                        {: RESULT = new CompoundExp(cleft, cright, l, s); :}
-                        | LBRAC:c  stmt_list:s RBRAC
-                        {:  RESULT = new CompoundExp(cleft, cright, null, s);  :}
-                        | LBRAC:c local_decls:l RBRAC
-                        {:  RESULT = new CompoundExp(cleft, cright, l, null);  :}
-                        | LBRAC:c  RBRAC
-                        {:  RESULT = new CompoundExp(cleft, cright, null, null);  :}
-                     ;
-
-local_decls           ::= local_decls:l var_decl:v
-                        {:
-                           System.out.println("LOCALDECLS");
-                           VarDecList decs = l;
-                           while (decs.tail != null)
-                              decs = decs.tail;
-                           decs.tail = new VarDecList(v, null);
-                           RESULT = l;
-                        :}
-                        | var_decl:v
-                           {: System.out.println("LOCALDECLS");
-                           RESULT = new VarDecList(v, null); :}
-                        | error:e var_decl:v
-                           {:System.out.println("LOCALDECLS");
-                           parser.report_error ("Invalid syntax in variable declarations", e);
-                           RESULT = new VarDecList(v, null);
-                           :}
-                        ;
-
-return_stmt          ::= RETURN:r expr:e SEMI
-                        {: RESULT = new ReturnExp(rleft, rright, e); :}
-                       | RETURN:r SEMI
-                        {: RESULT = new ReturnExp(rleft, rright, null); :}
-                     ;
