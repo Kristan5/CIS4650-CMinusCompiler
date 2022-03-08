@@ -157,7 +157,7 @@ public class ShowTreeVisitor implements AbsynVisitor {
 
   // Simple Declaration
   public void visit( SimpleDec exp, int level ) {
-
+    System.out.println("SimpleDec: " + exp);
   }
   
   // Simple Variable
@@ -178,26 +178,30 @@ public class ShowTreeVisitor implements AbsynVisitor {
 
   // Variable
   public void visit( Var exp, int level ) {
-
+    System.out.println("Var: " + exp);
   }
 
   // Variable Declaration
   public void visit( VarDec exp, int level ) {
+    System.out.println("VarDec: " + exp);
 
   }
 
   // Variable Declaration List
   public void visit( VarDecList exp, int level ) {
+    System.out.println("VarDecList: " + exp);
 
   }
 
   // Variable Expression
   public void visit( VarExp exp, int level ) {
+    System.out.println("VarExp: " + exp);
 
   }
 
   // While Expression
   public void visit( WhileExp exp, int level ) {
+    System.out.println("WhileExp: " + exp);
 
   }
 }
