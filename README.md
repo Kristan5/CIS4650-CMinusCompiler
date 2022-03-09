@@ -6,9 +6,9 @@ Semester: W22
 Current Checkpoint: ONE
 
 ## Acknowledgements: 
-This code is based off the example provided by Fei Song for the assignment. The 
+This code is based off the example provided by Kristan Samaroo and Indeep Farma for the assignment. The 
 CFGs created in the ``` cm.cup ``` file are based off of the "Syntatic Rules in BNF"
-section of the "Specification for the C-Language" pdf provided by Fei Song for the 
+section of the "Specification for the C-Language" pdf provided by Kristan Samaroo and Indeep Farma for the 
 assignment. 
 
 ## Executing Compiler: 

@@ -1,5 +1,5 @@
 /*
-  Created By: Fei Song
+  Created By: Kristan Samaroo and Indeep Farma
   File Name: tiny.flex
   To Build: jflex tiny.flex
 
