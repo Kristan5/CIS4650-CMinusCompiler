@@ -105,12 +105,13 @@ public class ShowTreeVisitor implements AbsynVisitor {
 
   // Declaration List Expression
   public void visit( DecList decList, int level) {
-    while(decList != null) {
-      if(decList.head != null){
-        decList.head.accept(this, level); 
-      }
-      decList = decList.tail;
-    }
+    System.out.println("SHOWSTREEVISITOR");
+    // while(decList != null) {
+    //   if(decList.head != null){
+    //     decList.head.accept(this, level); 
+    //   }
+    //   decList = decList.tail;
+    // }
   }
   
   // Declaration

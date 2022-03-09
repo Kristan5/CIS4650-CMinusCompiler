@@ -96,9 +96,7 @@ non terminal CompoundExp compound_stmt;
 /* ----------------------------Grammar Section-------------------- */
 
 program  ::= declaration_list:d
-            {: RESULT = d; 
-               Absyn.showTree(RESULT, 0);
-            :}
+               {: RESULT = d; :}
             ;
 
 declaration_list  ::= declaration_list:dl declaration:d

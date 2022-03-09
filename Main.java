@@ -23,8 +23,8 @@ class Main {
       Absyn result = (Absyn)(p.parse().value);      
       if (SHOW_TREE && result != null) {
          System.out.println("The abstract syntax tree is:");
-        //  ShowTreeVisitor visitor = new ShowTreeVisitor();
-        //  result.accept(visitor, 0); 
+         ShowTreeVisitor visitor = new ShowTreeVisitor();
+         result.accept(visitor, 0); 
       }
     } catch (Exception e) {
       /* do cleanup here -- possibly rethrow e */
