@@ -10,4 +10,8 @@ public class SimpleVar extends Var{
         this.col = col; 
         this.name = name; 
     }
+
+    public void accept( AbsynVisitor visitor, int level ) {
+		visitor.visit( this, level );
+	}
 }

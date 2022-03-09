@@ -1,6 +1,6 @@
 package absyn;
 
-public class VarDecList {
+public class VarDecList extends Absyn {
     public VarDec head; 
     public VarDecList tail; 
 
@@ -8,5 +8,9 @@ public class VarDecList {
         this.head = head; 
         this.tail = tail;
     }
+
+    public void accept( AbsynVisitor visitor, int level ) {
+		visitor.visit( this, level );
+	}
 
 }
