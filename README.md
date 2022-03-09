@@ -14,9 +14,13 @@ The make file has instructions on how to clean, compile, and run the code. The
 following commands are to be run from the root directory of the project. 
 
 To compile; 
+
 ``` make ``` 
+
 To run: 
+
 ``` java -cp /usr/share/java/cup.jar:. Main  {testFile}``` 
+
 ({testFile} is to be replaced with a .cm filename. testFiles/fac.cm for example)
 
 You can also create just the Lexer with ``` make Lexer.java ``` or just the
