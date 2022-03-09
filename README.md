@@ -1,6 +1,8 @@
 # C Minus Compiler (CIS4650)
 Developers: Kristan Samaroo, Indeep Farma
+
 Semester: W22 
+
 Current Checkpoint: ONE
 
 ## Acknowledgements: 
