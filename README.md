@@ -13,7 +13,7 @@ assignment.
 The make file has instructions on how to clean, compile, and run the code. The 
 following commands are to be run from the root directory of the project. 
 
-To compile; 
+To compile: 
 
 ``` make ``` 
 
