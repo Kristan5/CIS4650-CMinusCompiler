@@ -1,72 +1,50 @@
+# C Minus Compiler (CIS4650)
+Developers: Kristan Samaroo, Indeep Farma
 
-## Development Steps:
-### 1. cm.flex (DONE)
-### 2. cm.cup (ERROR HANDLING TODO)
-### 3. ShowTreeVisitor.java  (NOT DONE)
-### 4. /absyn classes (MOSTLY DONE)
-### 5. absyn/AbsynVisitor.java (DONE)
- 
- ShowTreeVisitor: 
- - [ ]  ArrayDec
- - [ ]  AssignExp
- - [x]  CallExp
- - [ ]  Dec
- - [x]  DecList
- - [ ]  Exp
- - [x]  ExpList
- - [ ]  FunctionDec
- - [x]  IfExp
- - [x]  IndexVar
- - [x]  IntExp
- - [x]  NilExp
- - [x]  OpExp
- - [x]  ReturnExp
- - [ ]  SimpleDec
- - [x]  SimpleVar
- - [ ]  Type
- - [ ]  Var
- - [ ]  VarDec
- - [ ]  VarDecList
- - [ ]  VarExp
- - [ ]  WhileExp
+Semester: W22 
 
-## TODO: 
-- Add error RESULT after each '''parser.report_error()'''
-  - And other error handling
-- change all '''pos''' to row and col
-- CallExp Class
+Current Checkpoint: ONE
 
-# Other: 
+## Acknowledgements: 
+This code is based off the example provided by Fei Song for the assignment. The 
+CFGs created in the ``` cm.cup ``` file are based off of the "Syntatic Rules in BNF"
+section of the "Specification for the C-Language" pdf provided by Fei Song for the 
+assignment. 
 
-## A JFlex+Cup implementation for the Tiny programming language.
+## Executing Compiler: 
+The make file has instructions on how to clean, compile, and run the code. The 
+following commands are to be run from the root directory of the project. 
 
-  Please note that you need to modify the paths for CLASSPATH, JFLEX, and CUP in 
-the Makefile so that the related commands can be found on your particular 
-machine.  For example, the given settings in Makefile are for the Linux 
-server and the commented settings are for my MacBook.
+To compile: 
 
-  To build the parser, type "make" in the current directory, which will 
-generate an executable program called "Main".
+``` make ``` 
 
-  To test source code like "fac.tiny", type 
+To run: 
 
-    "java -cp /usr/share/java/cup.jar:. Main fac.tiny" 
+``` java -cp /usr/share/java/cup.jar:. Main  {testFile}``` 
 
-and the syntax tree will be displayed on the screen.
+({testFile} is to be replaced with a .cm filename. testFiles/fac.cm for example)
 
-  To rebuild the parser, type "make clean" and type "make" again.
+You can also create just the Lexer with ``` make Lexer.java ``` or just the
+parser with ``` make parser.java ```. 
 
-  Also note that all the abstract syntax tree structures are defined under
-the directory "absyn" and the methods for showing a syntax tree is implemented
-by the visitor pattern in "ShowTreeVisitor.java".  Since some java files are 
-generated automatically, they may contain variables that are not used, which 
-are safe to ignore in the compilation process.
+## Directory Structure: 
 
-  Also included in this package are four versions of the tiny.cup file: tiny.cup.bare
-defines all token types but has basically no grammar rules, which can be used to test 
-your scanner implementation; tiny.cup.rules contains all the grammar rules but doesn't
-generate any output, which can be used to test if the given grammar can be run properly;
-tiny.cup.layered uses the same grammar and shows the syntax trees through the visitor
-pattern; and tiny.cup.ordered simplifies the grammar with precedence directives in CUP.
-You are encouraged to follow these steps to build your parser incrementaly for Checkpoint
-One implementation.
+The main components of this project include the following: 
+
+##### /absyn
+  This directory contains the classes used to represent grammar rules defined 
+  in ``` cm.cup ```. They can be split up into two main groups: Declarations 
+  and Expressions. ``` Dec ```  and ``` Exp ``` both inherit from ``` Absyn.java ```. 
+
+##### cm.cup
+  Contains the CFGs that are used to recognize syntatical patterns. These CFGs create 
+  objects of /absyn classes.
+
+##### cm.flex
+  Contains regex for matching text in .cm files. These matched items are then used 
+  in cm.cup 
+
+##### ShowTreeVisitor.java
+  Shows tree created to represent the structure of a given .cm file. 
+
