@@ -10,8 +10,7 @@ CUP=cup
 all: Main.class
 
 test: 
-	make clean 
-	make
+	make remake
 	java -cp /usr/share/java/cup.jar:. Main testFiles/fac.cm
 	# java -cp /usr/share/java/cup.jar:. Main testFiles/fac_simple.cm
 
@@ -34,3 +33,15 @@ parser.java: cm.cup
 
 clean:
 	rm -f parser.java Lexer.java sym.java *.class absyn/*.class *~
+
+ex1: 
+	make remake
+	java -cp /usr/share/java/cup.jar:. Main testFiles/fac.cm
+
+ex2: 
+	make remake
+	java -cp /usr/share/java/cup.jar:. Main testFiles/gcd.cm
+
+ex3: 
+	make remake
+	java -cp /usr/share/java/cup.jar:. Main testFiles/sort.cm
