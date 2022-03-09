@@ -19,7 +19,8 @@ remake:
 	make clean
 	make
 
-Main.class: absyn/*.java parser.java sym.java Lexer.java ShowTreeVisitor.java Scanner.java Main.java
+# Main.class: absyn/*.java parser.java sym.java Lexer.java ShowTreeVisitor.java Scanner.java Main.java
+Main.class: absyn/*.java parser.java sym.java Lexer.java Main.java
 
 %.class: %.java
 	$(JAVAC) $(CLASSPATH) $^

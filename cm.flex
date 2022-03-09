@@ -72,24 +72,23 @@ import java_cup.runtime.*;
 /* A line terminator is a \r (carriage return), \n (line feed), or
    \r\n. */
 LineTerminator = \r|\n|\r\n
-   
+
 /* White space is a line terminator, space, tab, or form feed. */
 WhiteSpace     = {LineTerminator} | [ \t\f]
-   
+
 /* A literal integer is is a number beginning with a number between
    one and nine followed by zero or more numbers between zero and nine
    or just a zero.  */
 digit = [0-9]
-number = {digit}+
-   
+number = {digit}{digit}*
+
 /* A identifier integer is a word beginning a letter between A and
    Z, a and z, or an underscore followed by zero or more letters
    between A and Z, a and z, zero and nine, or an underscore. */
 letter = [a-zA-Z]
-identifier = {letter}+
-comment =  \/\/.*|\/\*(.|LineTerminator)*\*\/
+id = {letter}{letter}*
+comment = \/\*[^*]*[*]+([^/*][^*]*[*]+)*\/
 
-   
 %%
 /* ------------------------Lexical Rules Section---------------------- */
    
@@ -97,35 +96,34 @@ comment =  \/\/.*|\/\*(.|LineTerminator)*\*\/
    This section contains regular expressions and actions, i.e. Java
    code, that will be executed when the scanner matches the associated
    regular expression. */
-    
-"if"               { return symbol(sym.IF); }
-"else"             { return symbol(sym.ELSE); }
-"int"              { return symbol(sym.INT); }      /***** ADD THIS TO SYMBOL *****/
-"return"           { return symbol(sym.RETURN); }   /***** ADD THIS TO SYMBOL *****/
-"void"             { return symbol(sym.VOID); }      /***** ADD THIS TO SYMBOL *****/
-"while"            { return symbol(sym.WHILE); }     /***** ADD THIS TO SYMBOL *****/
-"+"                { return symbol(sym.PLUS); }
-"-"                { return symbol(sym.MINUS); }
-"*"                { return symbol(sym.TIMES); }
-"/"                { return symbol(sym.OVER); }
-"<"                { return symbol(sym.LT); }
-"<="               { return symbol(sym.LTE); }      /***** ADD THIS TO SYMBOL *****/
-">"                { return symbol(sym.GT); }
-">="               { return symbol(sym.GTE); }      /***** ADD THIS TO SYMBOL *****/
-"=="               { return symbol(sym.EQEQ); }     /***** ADD THIS TO SYMBOL *****/
-"!="               { return symbol(sym.NOTEQ); }    /***** ADD THIS TO SYMBOL *****/
-"="                { return symbol(sym.EQ); }
-";"                { return symbol(sym.SEMI); }
-","                { return symbol(sym.COMMA); }    /***** ADD THIS TO SYMBOL *****/
-"("                { return symbol(sym.LPAREN); }
-")"                { return symbol(sym.RPAREN); }
-"["                { return symbol(sym.LSQBRAC); }  /***** ADD THIS TO SYMBOL *****/
-"]"                { return symbol(sym.RSQBRAC); }  /***** ADD THIS TO SYMBOL *****/
-"{"                { return symbol(sym.LBRAC); }    /***** ADD THIS TO SYMBOL *****/
-"}"                { return symbol(sym.RBRAC); }    /***** ADD THIS TO SYMBOL *****/
-{number}           { return symbol(sym.NUM, yytext()); }
-{identifier}       { return symbol(sym.ID, yytext()); }
-{WhiteSpace}+      { /* skip whitespace */ }   
-"{"[^\}]*"}"       { /* skip comments */ }
-{comment}          { /* skip comments */}
-.                  { return symbol(sym.ERROR); }
+
+"if"					   { return symbol(sym.IF);}
+"else"					{ return symbol(sym.ELSE); }
+"while"					{ return symbol(sym.WHILE); }
+"int"					   { return symbol(sym.INT); }
+"void"					{ return symbol(sym.VOID); }
+"return"				   { return symbol(sym.RETURN); }
+"+"						{ return symbol(sym.PLUS); }
+"-"						{ return symbol(sym.MINUS); }
+"*"						{ return symbol(sym.TIMES); }
+"/"						{ return symbol(sym.DIVIDE); }
+"="						{ return symbol(sym.EQ); }
+"=="					   { return symbol(sym.EQEQ); }
+"<"						{ return symbol(sym.LT); }
+"<="					   { return symbol(sym.LTE); }
+">"						{ return symbol(sym.GT); }
+">="					   { return symbol(sym.GTE); }
+"!="					   { return symbol(sym.NOTEQ); }
+";"						{ return symbol(sym.SEMI); }
+","						{ return symbol(sym.COMMA); }
+"("						{ return symbol(sym.LPAREN); }
+")"						{ return symbol(sym.RPAREN); }
+"["						{ return symbol(sym.LSQBRAC); }
+"]"						{ return symbol(sym.RSQBRAC); }
+"{"						{ return symbol(sym.LBRAC); }
+"}"						{ return symbol(sym.RBRAC); }
+{number}					{ return symbol(sym.NUM, Integer.parseInt(yytext())); }
+{id}					   { return symbol(sym.ID, yytext()); }
+{WhiteSpace}			{ /* Do Nothing */ }
+{comment}				{ /* Do Nothing */ }
+.                    { return symbol(sym.ERROR); }

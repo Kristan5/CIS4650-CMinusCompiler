@@ -1,9 +1,9 @@
 package absyn;
 
 public class SimpleDec extends VarDec {
-    public int pos;
-    public SimpleDec(int pos, Type type, String name){
-		this.pos = pos;
+    public SimpleDec(int row, int col, Type type, String name){
+		this.row = row;
+		this.col = col;
 		this.type = type;
 		this.name = name;
 	}
