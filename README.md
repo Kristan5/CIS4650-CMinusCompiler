@@ -1,5 +1,4 @@
-
-## C Minus Compiler (CIS4650)
+# C Minus Compiler (CIS4650)
 Developers: Kristan Samaroo, Indeep Farma
 Semester: W22 
 Current Checkpoint: ONE
@@ -27,19 +26,19 @@ parser with ``` make parser.java ```.
 
 The main components of this project include the following: 
 
-### /absyn
+##### /absyn
   This directory contains the classes used to represent grammar rules defined 
   in ``` cm.cup ```. They can be split up into two main groups: Declarations 
   and Expressions. ``` Dec ```  and ``` Exp ``` both inherit from ``` Absyn.java ```. 
 
-### cm.cup
+##### cm.cup
   Contains the CFGs that are used to recognize syntatical patterns. These CFGs create 
   objects of /absyn classes.
 
-### cm.flex
+##### cm.flex
   Contains regex for matching text in .cm files. These matched items are then used 
   in cm.cup 
 
-### ShowTreeVisitor.java
+##### ShowTreeVisitor.java
   Shows tree created to represent the structure of a given .cm file. 
 
