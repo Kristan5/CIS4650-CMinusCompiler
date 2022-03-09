@@ -1,1 +1,3 @@
-x - fact * x / 3
+int main(void) {
+    int k;
+}

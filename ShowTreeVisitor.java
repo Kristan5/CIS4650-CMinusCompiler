@@ -18,20 +18,27 @@ public class ShowTreeVisitor implements AbsynVisitor {
 
   // ArrayDec
   public void visit( ArrayDec expList, int level ) {
-    // indent( level );
-    // if (expList.size != null)
-    System.out.println("ArrayDec: " + expList.name);
-    
+    indent( level );
+    System.out.println("ArrDec: ");
+    level += level;
+    visit(expList.type, level);
+    indent( level );
+    System.out.println("Array Name: " + expList.name);
+    if(expList.size != null) {
+      visit(expList.size, level);
+    }
   }
 
   // Assign Expression
   public void visit( AssignExp exp, int level ) {
-    indent( level );
-    System.out.println( "AssignExp:");
-    level++;
-    // NEED TO FIX THIS 'ShowTreeVisitor.java:24: error: cannot find symbol' on lhs.accept (Add accept to var)
-    // exp.lhs.accept( this, level );
-    // exp.rhs.accept( this, level );
+    indent(level);
+    System.out.println("AssignExp: ");
+    level += level;
+    visit(exp.lhs, level);
+    level += level;
+    indent(level);
+    System.out.println(" = ");
+    visit(exp.rhs, level);
   }
 
   // If Expression
@@ -41,14 +48,18 @@ public class ShowTreeVisitor implements AbsynVisitor {
     level++;
     exp.test.accept( this, level );
     exp.thenpart.accept( this, level );
-    if (exp.elsepart != null )
-       exp.elsepart.accept( this, level );
+    if (exp.elsepart != null ){
+      exp.elsepart.accept( this, level );
+    }
   }
   
   // Int Expression
   public void visit( IntExp exp, int level ) {
     indent( level );
-    System.out.println( "IntExp: " + exp.value ); 
+    System.out.println( "IntExp: "); 
+    level += level;
+    indent( level );
+    System.out.println(exp.value);
   }
 
   // Operation Expression
@@ -96,41 +107,73 @@ public class ShowTreeVisitor implements AbsynVisitor {
 
   // Call Expression
   public void visit( CallExp exp, int level ) {
-    indent( level ); 
-    System.out.println("CallExp: " + exp.function);
-    level ++; 
-    if (exp.args != null)
-      exp.args.accept(this, level);
+    indent( level );
+    System.out.println("CallExp: ");
+    level += level;
+    indent( level );
+    System.out.println(exp.function);
+    visit(exp.args, level);
   }
 
   // Declaration List Expression
   public void visit( DecList decList, int level) {
     System.out.println("SHOWSTREEVISITOR");
-    // while(decList != null) {
-    //   if(decList.head != null){
-    //     decList.head.accept(this, level); 
-    //   }
-    //   decList = decList.tail;
-    // }
+    while(decList != null) {
+      if(decList.head != null){
+        decList.head.accept(this, level); 
+      }
+      decList = decList.tail;
+    }
   }
   
   // Declaration
   public void visit( Dec decl, int level) {
-    // indent(level);
-    System.out.println("Declaration: " + decl);
-    // level++;
-    // decl.lhs.accept(this, level);
-    // decl.rhs.accept(this, level);
+    if(decl instanceof VarDec) {
+      visit((VarDec)decl, level);
+    } else if(decl instanceof FunctionDec) {
+      visit((FunctionDec)decl, level);
+    } else {
+      indent(level);
+      System.out.println("Illegal Expression. Row: " + decl.row + " Col: " + decl.col);
+    }
   }
 
   // Expression
   public void visit( Exp exp, int level ) {
-    System.out.println("Exp: " + exp);
+    if(exp instanceof ReturnExp) {
+      visit((ReturnExp)exp, level);
+    } else if(exp instanceof CompoundExp) {
+      visit((CompoundExp)exp, level);
+    } else if(exp instanceof WhileExp) {
+      visit((WhileExp)exp, level);
+    } else if(exp instanceof IfExp) {
+      visit((IfExp)exp, level);
+    } else if(exp instanceof AssignExp) {
+      visit((AssignExp)exp, level);
+    } else if(exp instanceof OpExp) {
+      visit((OpExp)exp, level);
+    } else if(exp instanceof CallExp) {
+      visit((CallExp)exp, level);
+    } else if(exp instanceof IntExp) {
+      visit((IntExp)exp, level);
+    } else if(exp instanceof VarExp) {
+      visit((VarExp)exp, level);
+    } else {
+      indent(level);
+      System.out.println("Illegal expression. Row: " + exp.row + " Col: " + exp.col);
+    }
   }
 
   // Function Expression
   public void visit( FunctionDec exp, int level ) {
-    System.out.println("FunctionDec: " + exp.function);
+    indent( level );
+    System.out.println("FunctionDec: ");
+    level += level;
+    visit(exp.type, level);
+    indent( level );
+    System.out.println("Function: " + exp.function);
+    visit(exp.param_list, level);
+    visit(exp.test, level);    /******* COME BACK TO THIS BOYO */
   }
 
   // Index Variable
@@ -158,18 +201,25 @@ public class ShowTreeVisitor implements AbsynVisitor {
 
   // Simple Declaration
   public void visit( SimpleDec exp, int level ) {
-    System.out.println("SimpleDec: " + exp);
+    indent(level);
+    System.out.println("SimpleDec: ");
+    indent(level);
+    visit(exp.type, level);
+    level += level;
+    indent(level);
+    System.out.println("SimpleDec name: " + exp.name);
   }
   
   // Simple Variable
   public void visit( SimpleVar exp, int level ) {
     indent( level );
-    System.out.println( "SimpleVar: " + exp.name ); 
+    System.out.println( "SimpleVar: ");
+    level += level;
+    indent( level );
+    System.out.println("SimpleVar name: " + exp.name);
   }
   
   public void visit( Type exp, int level ) {
-    System.out.println("TYPE: ");
-    
     if (exp.type == Type.INT)
       System.out.println("Type: INTEGER");
     else 
@@ -184,8 +234,15 @@ public class ShowTreeVisitor implements AbsynVisitor {
 
   // Variable Declaration
   public void visit( VarDec exp, int level ) {
-    System.out.println("VarDec: " + exp);
-
+    System.out.println("VARIABLE DEC");
+    if(exp instanceof SimpleDec) {
+      visit((SimpleDec)exp, level);
+    } else if(exp instanceof ArrayDec) {
+      visit((ArrayDec)exp, level);
+    } else {
+      indent(level);
+      System.out.println("Illegal expression. Row: " + exp.row + " Col: " + exp.col);
+    }
   }
 
   // Variable Declaration List

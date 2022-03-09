@@ -12,7 +12,7 @@ all: Main.class
 test: 
 	make clean 
 	make
-	java -cp /usr/share/java/cup.jar:. Main testFiles/fac.cm
+	java -cp /usr/share/java/cup.jar:. Main testFiles/ex1.tiny
 	# java -cp /usr/share/java/cup.jar:. Main testFiles/fac_simple.cm
 
 remake: 

@@ -138,7 +138,7 @@ type_specifier ::= INT:i
 
 fun_declaration   ::= type_specifier:t ID:i LPAREN params:p RPAREN compound_stmt:c
                         {: RESULT = new FunctionDec(tleft,tright, t, i, p, c); :}
-                      ;
+                     ;
 
 params   ::= param_list:p
                {: RESULT = p; :}
