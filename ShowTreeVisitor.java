@@ -85,6 +85,9 @@ public class ShowTreeVisitor implements AbsynVisitor {
       case OpExp.LT:
         System.out.println( " < " );
         break;
+      case OpExp.GT:
+        System.out.println( " > " );
+        break;
       case OpExp.EQEQ:
         System.out.println( " == " );
         break;
