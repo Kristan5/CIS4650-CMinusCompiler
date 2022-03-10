@@ -97,6 +97,8 @@ non terminal CompoundExp compound_stmt;
 
 program  ::= declaration_list:d
                {: RESULT = d; :}
+            | ERROR
+               {: RESULT = null; :}
             ;
 
 declaration_list  ::= declaration_list:dl declaration:d
@@ -128,7 +130,17 @@ var_declaration   ::= type_specifier:t ID:i SEMI
                         {: RESULT = new SimpleDec(tleft, tright, t, i); :}
 					      | type_specifier:t ID:i LSQBRAC NUM:n RSQBRAC SEMI
                         {: RESULT = new ArrayDec(tleft,tright, t, i, new IntExp(ileft, iright, n)); :}
-					      ;
+                     | type_specifier:t ID:i error:e
+                        {: 
+                           parser.report_error("Invalid variable declaration: missing semi colon", e);
+                           RESULT = new ArrayDec(tleft,tright, t, i, new IntExp(ileft, iright, 0)); 
+                        :}
+                     | type_specifier:t ID:i LSQBRAC error:e RSQBRAC SEMI
+                        {: 
+                           parser.report_error("Invalid variable declaration: invalid array size", e);
+                           RESULT = new ArrayDec(tleft,tright, t, i, new IntExp(ileft, iright, 0)); 
+                        :}
+                     ;
 
 type_specifier ::= INT:i
                      {: RESULT = new Type(ileft, iright, Type.INT); :}
@@ -138,6 +150,16 @@ type_specifier ::= INT:i
 
 fun_declaration   ::= type_specifier:t ID:i LPAREN params:p RPAREN compound_stmt:c
                         {: RESULT = new FunctionDec(tleft,tright, t, i, p, c); :}
+                     | type_specifier:t ID:i LPAREN params:p RPAREN error:e
+                        {: 
+                           parser.report_error("Invalid function declaration: Error inside function body", e);
+                           RESULT = new FunctionDec(eleft, eright, new Type(eleft, eright, Type.VOID), "", new VarDecList(null, null), new CompoundExp(eleft, eright, null, null));
+                        :}
+                     | type_specifier:t ID:i LPAREN error:e RPAREN compound_stmt:c
+                        {: 
+                           parser.report_error("Invalid function declaration: Parameter error", e);
+                           RESULT = new FunctionDec(eleft, eright, new Type(eleft, eright, Type.VOID), "", new VarDecList(null, null), new CompoundExp(eleft, eright, null, null));
+                        :}
                      ;
 
 params   ::= param_list:p
@@ -186,6 +208,11 @@ statement   ::= expression_stmt:e
                   {: RESULT = i; :}
                | return_stmt:r
                   {: RESULT = r; :}
+               | error:e SEMI
+                 {: 
+                     parser.report_error("Invalid statement", e);
+                     RESULT = new ReturnExp(eleft, eright, new NilExp(eleft, eright));
+                  :}
                ;
 
 expression_stmt   ::= expression:e SEMI
@@ -207,6 +234,11 @@ return_stmt ::= RETURN:r SEMI
                   {: RESULT = new ReturnExp(rleft, rright, null); :}
                | RETURN:r expression:e SEMI
                   {: RESULT = new ReturnExp(rleft, rright, e); :}
+               | RETURN:r error:e
+                  {: 
+                     parser.report_error("Invalid return statement", e);
+                     RESULT = new ReturnExp(eleft, eright, new NilExp(eleft, eright));
+                  :}
                ;
 
 expression  ::= var:v EQ expression:e

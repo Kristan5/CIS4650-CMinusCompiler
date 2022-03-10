@@ -1,0 +1,15 @@
+/* this file has an invalid array size, should create invalid array size error  */
+
+void main(void) {
+  int x; int fac;
+  int a[];
+  x = input();
+  fac = 1;
+  
+  while (x > 1) {
+    fac = fac * x;
+    x = x - 1;
+  } 
+
+  output(fac);
+}

@@ -1,0 +1,3 @@
+/* this file has an invalid body, should create invalid compound exp error  */
+
+int main(void) 
