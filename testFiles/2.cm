@@ -1,0 +1,14 @@
+/* this file has an missing semi colon in the first variable declaration */
+
+void main(void) {
+  int x
+  x = input();
+  fac = 1;
+  
+  while (x > 1) {
+    fac = fac * x;
+    x = x - 1;
+  } 
+
+  output(fac);
+}

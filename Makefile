@@ -12,7 +12,6 @@ all: Main.class
 test: 
 	make remake
 	java -cp /usr/share/java/cup.jar:. Main testFiles/1.cm
-	# java -cp /usr/share/java/cup.jar:. Main testFiles/fac_simple.cm
 
 remake: 
 	make clean
@@ -34,14 +33,35 @@ parser.java: cm.cup
 clean:
 	rm -f parser.java Lexer.java sym.java *.class absyn/*.class *~
 
-ex1: 
+# Test files for Checkpoint 1 demo: 
+fac: 
 	make remake
 	java -cp /usr/share/java/cup.jar:. Main testFiles/fac.cm
 
-ex2: 
+gcd: 
 	make remake
 	java -cp /usr/share/java/cup.jar:. Main testFiles/gcd.cm
 
-ex3: 
+sort: 
 	make remake
 	java -cp /usr/share/java/cup.jar:. Main testFiles/sort.cm
+
+ex1:
+	make remake
+	java -cp /usr/share/java/cup.jar:. Main testFiles/1.cm
+
+ex2:
+	make remake
+	java -cp /usr/share/java/cup.jar:. Main testFiles/2.cm
+
+ex3:
+	make remake
+	java -cp /usr/share/java/cup.jar:. Main testFiles/3.cm
+
+ex4:
+	make remake
+	java -cp /usr/share/java/cup.jar:. Main testFiles/4.cm
+
+ex5:
+	make remake
+	java -cp /usr/share/java/cup.jar:. Main testFiles/5.cm
