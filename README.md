@@ -11,6 +11,9 @@ CFGs created in the ``` cm.cup ``` file are based off of the "Syntatic Rules in 
 section of the "Specification for the C-Language" pdf provided by Kristan Samaroo and Indeep Farma for the 
 assignment. 
 
+## Documentation
+The written documentation project report can be found in the 'documentation' folder.
+
 ## Executing Compiler: 
 The make file has instructions on how to clean, compile, and run the code. The 
 following commands are to be run from the root directory of the project. 

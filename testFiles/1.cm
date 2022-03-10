@@ -1,0 +1,16 @@
+/* Takes two numbers and divides them...if denominator is 0 then return 0*/
+
+int divide(int one, int two) {
+    int quotient;
+    quotient = 0;
+
+    if(two != 0) quotient = one/two;
+    return quotient;
+}
+void main(void) {
+    int i; int j;
+    i = 1;
+    j = 2;
+
+    divide(i,j);
+}

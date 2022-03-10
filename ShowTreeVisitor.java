@@ -246,7 +246,7 @@ public class ShowTreeVisitor implements AbsynVisitor {
 
   // Variable Declaration
   public void visit( VarDec exp, int level ) {
-    System.out.println("VARIABLE DEC");
+    // System.out.println("VARIABLE DEC");
     if(exp instanceof SimpleDec) {
       visit((SimpleDec)exp, level);
     } else if(exp instanceof ArrayDec) {
