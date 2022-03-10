@@ -132,12 +132,12 @@ var_declaration   ::= type_specifier:t ID:i SEMI
                         {: RESULT = new ArrayDec(tleft,tright, t, i, new IntExp(ileft, iright, n)); :}
                      | type_specifier:t ID:i error:e
                         {: 
-                           parser.report_error("Invalid variable declaration: missing semi colon", e);
+                           parser.report_error("Invalid variable declaration: missing semi colon {row:" + (eleft + 1) + ",col:" + eright + "}", e);
                            RESULT = new ArrayDec(tleft,tright, t, i, new IntExp(ileft, iright, 0)); 
                         :}
                      | type_specifier:t ID:i LSQBRAC error:e RSQBRAC SEMI
                         {: 
-                           parser.report_error("Invalid variable declaration: invalid array size", e);
+                           parser.report_error("Invalid variable declaration: invalid array size {row:" + (eleft + 1) + ",col:" + eright + "}", e);
                            RESULT = new ArrayDec(tleft,tright, t, i, new IntExp(ileft, iright, 0)); 
                         :}
                      ;
@@ -152,12 +152,12 @@ fun_declaration   ::= type_specifier:t ID:i LPAREN params:p RPAREN compound_stmt
                         {: RESULT = new FunctionDec(tleft,tright, t, i, p, c); :}
                      | type_specifier:t ID:i LPAREN params:p RPAREN error:e
                         {: 
-                           parser.report_error("Invalid function declaration: Error inside function body", e);
+                           parser.report_error("Invalid function declaration: Error inside function body {row:" + (eleft + 1) + ",col:" + eright + "}", e);
                            RESULT = new FunctionDec(eleft, eright, new Type(eleft, eright, Type.VOID), "", new VarDecList(null, null), new CompoundExp(eleft, eright, null, null));
                         :}
                      | type_specifier:t ID:i LPAREN error:e RPAREN compound_stmt:c
                         {: 
-                           parser.report_error("Invalid function declaration: Parameter error", e);
+                           parser.report_error("Invalid function declaration: Parameter error {row:" + (eleft + 1) + ",col:" + eright + "}", e);
                            RESULT = new FunctionDec(eleft, eright, new Type(eleft, eright, Type.VOID), "", new VarDecList(null, null), new CompoundExp(eleft, eright, null, null));
                         :}
                      ;
