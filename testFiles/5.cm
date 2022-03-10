@@ -1,0 +1,30 @@
+/* No errors
+** Function to find the largest number among 3 numbers */
+void main(void) {
+    int a;
+    int b;
+    int c;
+    int big;
+
+    a = input();
+    b = input();
+    c = input();
+
+    if(a >= b) {
+        if(a >= c) {
+            big = a;
+        }
+    }
+
+    if(b >= a) {
+        if(b >= c) {
+            big = b;
+        }
+    }
+
+    if(c >= a) {
+        if(c >= b) {
+            big = c;
+        }
+    }
+}
