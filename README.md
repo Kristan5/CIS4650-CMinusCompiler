@@ -31,6 +31,20 @@ To run:
 You can also create just the Lexer with ``` make Lexer.java ``` or just the
 parser with ``` make parser.java ```. 
 
+## Running Demo Testing Files (fac.cm, gcd.cm, sort.cm, 1.cm - 5.cm):
+In order to run the files used in the demo (as per the marking scheme document), you can use the 
+makefile targets to run respective files such as the following:
+
+``` make fac ``` 
+
+``` make gcd ``` 
+
+``` make sort ``` 
+
+``` make ex1 ``` 
+(replace 1 with [2,3,4,5] for each x.cm file)
+
+
 ## Directory Structure: 
 
 The main components of this project include the following: 
