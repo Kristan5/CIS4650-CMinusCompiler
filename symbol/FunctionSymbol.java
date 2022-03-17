@@ -1,7 +1,7 @@
 package symbol; 
 
 public class FunctionSymbol extends Symbol {
-    public FunctionSymbol() {
+  public FunctionSymbol() {
 
-    }
+  }
 }
