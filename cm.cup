@@ -96,7 +96,9 @@ non terminal CompoundExp compound_stmt;
 /* ----------------------------Grammar Section-------------------- */
 
 program  ::= declaration_list:d
-               {: RESULT = d; :}
+               {: RESULT = d; 
+                  SemanticAnalyzer analyzer = new SemanticAnalyzer(); 
+               :}
             | ERROR
                {: RESULT = null; :}
             ;
