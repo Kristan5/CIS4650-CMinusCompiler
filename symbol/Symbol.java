@@ -1,5 +1,6 @@
 package symbol; 
 
-public class Symbol {
-
+public abstract class Symbol {
+    public int id;
+    public int type;
 }
