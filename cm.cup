@@ -17,12 +17,6 @@ parser code {:
 
   public String filename; 
   public boolean SHOW_SYM;
- 
-  public void displaySYM(boolean SHOW_SYM) {
-     SemanticAnalyzer analyzer = new SemanticAnalyzer(SHOW_SYM); 
-     
-
-  }
   
   /* Change the method report_error so it will display the line and
     column of where the error occurred in the input as well as the
@@ -106,10 +100,9 @@ non terminal CompoundExp compound_stmt;
 
 program  ::= declaration_list:d
                {: RESULT = d; 
-                  SemanticAnalyzer analyzer = new SemanticAnalyzer(); 
-
-                  // semantic analyzer will always be run, SHOW_SYM boolean will be a parameter to control if displaying or not
-                  parser.displaySYM(SHOW_SYM); 
+                  
+                  // semantic analyzer will always be run, SHOW_SYM boolean will be a parameter to control if output to console or not
+                  SemanticAnalyzer analyzer = new SemanticAnalyzer(SHOW_SYM, RESULT); 
 
                :}
             | ERROR

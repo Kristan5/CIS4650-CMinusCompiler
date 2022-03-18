@@ -7,7 +7,7 @@ import java.util.HashMap;
 public class SymbolTable {
     private ArrayList<HashMap<Integer, Symbol>> symbolTable; 
 
-    public SymbolTable() {
+    public SymbolTable(boolean SHOW_SYM) {
         symbolTable = new ArrayList<HashMap<Integer, Symbol>>();
 
     }
