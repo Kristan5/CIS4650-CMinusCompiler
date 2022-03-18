@@ -6,11 +6,11 @@ import java.util.HashMap;
 
 public class SymbolTable {
     private ArrayList<HashMap<Integer, Symbol>> symbolTable;
-    // private boolean scope;
+    // private boolean showSym;
 
     final static int SPACES = 4;
 
-    public SymbolTable() {
+    public SymbolTable(boolean showSym) {
         symbolTable = new ArrayList<HashMap<Integer, Symbol>>();
 
     }
@@ -67,5 +67,16 @@ public class SymbolTable {
         return retVal;
     }
 
+    /* Print the scope
+    **************************************
+    **************************************
+            FINISH THIS
+    **************************************
+    **************************************
+    */
+    public void printScope() {
+        int length = symbolTable.size();
+        Set<Integer> keys = symbolTable.get(length - 1).keySet();
 
+    }
 }
