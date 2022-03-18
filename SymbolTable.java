@@ -53,5 +53,19 @@ public class SymbolTable {
         symbolTable.get(length - 1).put(id, symb);
     }
 
+    // Retrieve the symbol from the scope its in
+    public Symbol getSymbol(String symbol) {
+        int length = symbolTable.size();
+        int retVal = null;
+
+        for(int i = length - 1; i >= 0; i--) {
+            if(symbolTable(i).containsKey(symbol)) {
+                retVal = symbolTable.get(i).get(symbol);
+            }
+        }
+        
+        return retVal;
+    }
+
 
 }
