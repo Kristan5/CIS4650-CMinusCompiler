@@ -15,23 +15,14 @@ import absyn.*;
    line and column number of the error). */
 parser code {:
 
-  // public static String filename; 
-  // public static boolean arg_AST; 
-  // public static boolean arg_SYM; 
-  // public static Absyn mainResult; 
+  public String filename; 
+  public boolean SHOW_SYM;
+ 
+  public void displaySYM(boolean SHOW_SYM) {
+     SemanticAnalyzer analyzer = new SemanticAnalyzer(SHOW_SYM); 
+     
 
-  // public void displayAST() {
-  //   System.out.println("Parser displaying AST"); 
-  //   // ShowTreeVisitor visitor = new ShowTreeVisitor();
-  //   // result.accept(visitor, 0);
-  //   // mainResult.accept(visitor, 0);
-    
-  // }
-
-  // public void displaySYM() {
-  //   System.out.println("Parser displaying SYM"); 
-  // }
-
+  }
   
   /* Change the method report_error so it will display the line and
     column of where the error occurred in the input as well as the
@@ -115,15 +106,10 @@ non terminal CompoundExp compound_stmt;
 
 program  ::= declaration_list:d
                {: RESULT = d; 
-                  // SemanticAnalyzer analyzer = new SemanticAnalyzer(); 
-                  
-                  // System.out.println("filename: " + parser.filename);
-                  // System.out.println("arg_AST: " + parser.arg_AST);
-                  // System.out.println("arg_SYM: " + parser.arg_SYM);
+                  SemanticAnalyzer analyzer = new SemanticAnalyzer(); 
 
-                  // if (parser.arg_AST) parser.displayAST(); 
-                  // else if (parser.arg_SYM) parser.displaySYM(); 
-
+                  // semantic analyzer will always be run, SHOW_SYM boolean will be a parameter to control if displaying or not
+                  parser.displaySYM(SHOW_SYM); 
 
                :}
             | ERROR
