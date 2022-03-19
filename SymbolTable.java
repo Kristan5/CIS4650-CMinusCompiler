@@ -55,6 +55,7 @@ public class SymbolTable {
 
     // Retrieve the symbol from the scope its in
     public Symbol getSymbol(String symbol) {
+        // TODO: Should this be symbolTable.size() -1; ???
         int length = symbolTable.size();
         int symbolInt = Integer.parseInt(symbol);
 
