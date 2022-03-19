@@ -123,7 +123,14 @@ public class SemanticAnalyzer {
   // Index Variable
   public void visit( IndexVar exp) {
   
-    // visit(exp.index);
+    Symbol sym = symbolTable.getSymbol();
+
+    if () {
+
+    }
+
+    visit(exp.index);
+
   }
   
   // // Nil Expression
