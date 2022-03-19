@@ -1,6 +1,7 @@
 import absyn.*; 
 import symbol.*; 
 
+// @TODO: Add exitscope() method call to compound exp after symbol table implementation
 public class SemanticAnalyzer {
   private SymbolTable symbolTable; 
 
@@ -14,18 +15,12 @@ public class SemanticAnalyzer {
       
   }
   
-  /* 
-  COPIED FROM SHOWTREEVISITOR,
-  NEED TO GO THROUGH THIS AND MODIFY METHODS 
-  */
-  
-  
   // Expression List
   public void visit( ExpList expList) {
-    // while( expList != null ) {
-    //   expList.head.accept( this);
-    //   expList = expList.tail;
-    // } 
+    while( expList != null ) {
+      if (expList.head != null) visit(expList.head); 
+      expList = expList.tail;
+    } 
   }
 
   // ArrayDec
@@ -41,18 +36,18 @@ public class SemanticAnalyzer {
 
   // Assign Expression
   public void visit( AssignExp exp) {
-    // visit(exp.lhs);
-    // visit(exp.rhs);
+    visit(exp.lhs);
+    visit(exp.rhs);
   }
 
   // If Expression
   public void visit( IfExp exp) {
-
-    // exp.test.accept( this);
-    // exp.thenpart.accept( this);
-    // if (exp.elsepart != null ){
-    //   exp.elsepart.accept( this);
-    // }
+    // Might have to change this
+    visit(exp.test);
+    visit(exp.thenpart);
+    if (exp.elsepart != null ){
+      visit(exp.elsepart);
+    }
   }
   
   // Int Expression
@@ -62,47 +57,10 @@ public class SemanticAnalyzer {
   }
 
   // Operation Expression
-  public void visit( OpExp exp) {
-    
-
-    switch( exp.op ) {
-      case OpExp.PLUS:
-
-        break;
-      case OpExp.MINUS:
-
-        break;
-      case OpExp.TIMES:
-
-        break;
-      case OpExp.DIVIDE:
-
-        break;
-      case OpExp.EQ:
-
-        break;
-      case OpExp.LT:
-
-        break;
-      case OpExp.GT:
-
-        break;
-      case OpExp.EQEQ:
-
-        break;
-      case OpExp.NOTEQ:
-
-        break;
-      case OpExp.LTE:
-
-        break;
-      case OpExp.GTE:
-
-        break;
-    }
-    
-    // exp.left.accept( this);
-    // exp.right.accept( this);
+  public void visit( OpExp exp) {    
+    // Might have to change this
+    visit(exp.left);
+    visit(exp.right);
   }
 
   // Call Expression
@@ -124,39 +82,35 @@ public class SemanticAnalyzer {
   
   // Declaration
   public void visit( Dec decl) {
-    // if(decl instanceof VarDec) {
-    //   visit((VarDec)decl);
-    // } else if(decl instanceof FunctionDec) {
-    //   visit((FunctionDec)decl);
-    // } else {
-
-    // }
+    if(decl instanceof VarDec) {
+      visit((VarDec)decl);
+    } else if(decl instanceof FunctionDec) {
+      visit((FunctionDec)decl);
+    }
   }
 
   // Expression
   public void visit( Exp exp) {
-    // if(exp instanceof ReturnExp) {
-    //   visit((ReturnExp)exp);
-    // } else if(exp instanceof CompoundExp) {
-    //   visit((CompoundExp)exp);
-    // } else if(exp instanceof WhileExp) {
-    //   visit((WhileExp)exp);
-    // } else if(exp instanceof IfExp) {
-    //   visit((IfExp)exp);
-    // } else if(exp instanceof AssignExp) {
-    //   visit((AssignExp)exp);
-    // } else if(exp instanceof OpExp) {
-    //   visit((OpExp)exp);
-    // } else if(exp instanceof CallExp) {
-    //   visit((CallExp)exp);
-    // } else if(exp instanceof IntExp) {
-    //   visit((IntExp)exp);
-    // } else if(exp instanceof VarExp) {
-    //   visit((VarExp)exp);
-    // } else {
-      
-
-    // }
+    // Might have to change this
+    if(exp instanceof ReturnExp) {
+      visit((ReturnExp)exp);
+    } else if(exp instanceof CompoundExp) {
+      visit((CompoundExp)exp);
+    } else if(exp instanceof WhileExp) {
+      visit((WhileExp)exp);
+    } else if(exp instanceof IfExp) {
+      visit((IfExp)exp);
+    } else if(exp instanceof AssignExp) {
+      visit((AssignExp)exp);
+    } else if(exp instanceof OpExp) {
+      visit((OpExp)exp);
+    } else if(exp instanceof CallExp) {
+      visit((CallExp)exp);
+    } else if(exp instanceof IntExp) {
+      visit((IntExp)exp);
+    } else if(exp instanceof VarExp) {
+      visit((VarExp)exp);
+    }
   }
 
   // Function Expression
@@ -172,10 +126,10 @@ public class SemanticAnalyzer {
     // visit(exp.index);
   }
   
-  // Nil Expression
-  public void visit( NilExp exp) {
+  // // Nil Expression
+  // public void visit( NilExp exp) {
   
-  }
+  // }
 
   // Return Expression
   public void visit( ReturnExp exp) {
@@ -195,64 +149,63 @@ public class SemanticAnalyzer {
 
   }
   
-  public void visit( Type exp) {
-    // if(exp.type == Type.INT) { 
+  // public void visit( Type exp) {
+  //   // if(exp.type == Type.INT) { 
 
-    // } else {
+  //   // } else {
 
-    // }
-  }
+  //   // }
+  // }
   
   // Variable
   public void visit( Var exp) {
-    // if(exp instanceof IndexVar) {
-    //   visit((IndexVar)exp);
-    // } else if(exp instanceof SimpleVar) {
-    //   visit((SimpleVar)exp);
-    // } else {
-    //   
-    // }
+    if(exp instanceof IndexVar) {
+      visit((IndexVar)exp);
+    } else if(exp instanceof SimpleVar) {
+      visit((SimpleVar)exp);
+    }
   }
 
   // Variable Declaration
   public void visit( VarDec exp) {
-    // if(exp instanceof SimpleDec) {
-    //   visit((SimpleDec)exp);
-    // } else if(exp instanceof ArrayDec) {
-    //   visit((ArrayDec)exp);
-    // } else {
-    //   
-
-    // }
+    if(exp instanceof SimpleDec) {
+      visit((SimpleDec)exp);
+    } else if(exp instanceof ArrayDec) {
+      visit((ArrayDec)exp);
+    } 
   }
 
   // Variable Declaration List
   public void visit( VarDecList exp) {
-    // while(exp != null) {
-    //   if(exp.head != null) {
-    //     visit(exp.head);
-    //   }
-    //   exp = exp.tail;
-    // }
+    while(exp != null) {
+      if(exp.head != null) {
+        visit(exp.head);
+      }
+      exp = exp.tail;
+    }
   }
 
   // Variable Expression
   public void visit( VarExp exp) {
-
-    // visit(exp.var);
+    visit(exp.var);
   }
 
   // While Expression
   public void visit( WhileExp exp) {
-    // System.out.println("WhileExp: ");
-    // visit(exp.test);
-    // visit(exp.block);
+    // Might have to change this
+    visit(exp.test);
+    visit(exp.block);
   }
 
   //Compound Expression
   public void visit( CompoundExp exp) {
+    symbolTable.newScope();
+    visit(exp.decList);
+    visit(exp.expList);
 
-    // visit(exp.decList);
-    // visit(exp.expList);
+
+    // Might have to change this:
+
+    //symbolTable.exitScope(); 
   }
 }
