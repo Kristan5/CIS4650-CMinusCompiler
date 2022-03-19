@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class SymbolTable {
-    private ArrayList<HashMap<Integer, Symbol>> symbolTable;
+    private ArrayList<HashMap<String, Symbol>> symbolTable;
     // private boolean showSym;
 
     final static int SPACES = 4;
 
     public SymbolTable(boolean SHOW_SYM) {
-        symbolTable = new ArrayList<HashMap<Integer, Symbol>>();
+        symbolTable = new ArrayList<HashMap<String, Symbol>>();
 
     }
 
@@ -34,7 +34,7 @@ public class SymbolTable {
     // Add a new scope by making a new hashmap
     // Add it to the arraylist
     public void newScope() {
-        symbolTable.add(new HashMap<Integer, Symbol>());
+        symbolTable.add(new HashMap<String, Symbol>());
     }
 
     // Delete and exit the scope you're in
@@ -48,7 +48,7 @@ public class SymbolTable {
     }
 
     // Add a symbol to the hashmap
-    public void addSymbol(int id, Symbol symb) {
+    public void addSymbol(String id, Symbol symb) {
         int length = symbolTable.size();
         symbolTable.get(length - 1).put(id, symb);
     }
@@ -57,11 +57,10 @@ public class SymbolTable {
     public Symbol getSymbol(String symbol) {
         // TODO: Should this be symbolTable.size() -1; ???
         int length = symbolTable.size();
-        int symbolInt = Integer.parseInt(symbol);
 
         for(int i = length - 1; i >= 0; i--) {
-            if(symbolTable.get(i).containsKey(symbolInt)) {
-                return symbolTable.get(i).get(symbolInt);
+            if(symbolTable.get(i).containsKey(symbol)) {
+                return symbolTable.get(i).get(symbol);
             }
         }
         
