@@ -1,7 +1,7 @@
 import absyn.*; 
 import symbol.*; 
 
-// @TODO: Add exitscope() method call to compound exp after symbol table implementation
+// TODO: Add exitscope() method call to compound exp after symbol table implementation
 public class SemanticAnalyzer {
   private SymbolTable symbolTable; 
 
