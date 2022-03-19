@@ -11,8 +11,6 @@ public class SemanticAnalyzer {
     symbolTable = new SymbolTable(SHOW_SYM);
     // Start visiting declist
     visit(result);
-
-      
   }
   
   // Expression List
@@ -72,12 +70,14 @@ public class SemanticAnalyzer {
 
   // Declaration List Expression
   public void visit( DecList decList) {
-    // while(decList != null) {
-    //   if(decList.head != null){
-    //     // decList.head.accept(this); 
-    //   }
-    //   decList = decList.tail;
-    // }
+    // symbolTable.newScope(); 
+    
+    while(decList != null) {
+      if(decList.head != null){
+        visit(decList.head);
+      }
+      decList = decList.tail;
+    }
   }
   
   // Declaration
@@ -123,10 +123,16 @@ public class SemanticAnalyzer {
   // Index Variable
   public void visit( IndexVar exp) {
   
-    Symbol sym = symbolTable.getSymbol();
+    Symbol sym = symbolTable.getSymbol(exp.name);
+    int row = exp.row + 1;
 
-    if () {
-
+    if (sym != null) {
+      if (!(sym instanceof ArraySymbol)) {
+        System.err.println("Error: Line " + row + ": " + exp.name + " is not an array");
+      }
+    }
+    else {
+      System.err.println("");
     }
 
     visit(exp.index);
