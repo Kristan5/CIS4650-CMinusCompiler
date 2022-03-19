@@ -55,16 +55,16 @@ public class SymbolTable {
 
     // Retrieve the symbol from the scope its in
     public Symbol getSymbol(String symbol) {
+        // TODO: Should this be symbolTable.size() -1; ???
         int length = symbolTable.size();
-        // int retVal = null;
+        int symbolInt = Integer.parseInt(symbol);
 
         for(int i = length - 1; i >= 0; i--) {
-            if(symbolTable.get(i).containsKey(symbol)) {
-                // retVal = symbolTable.get(i).get(symbol);
+            if(symbolTable.get(i).containsKey(symbolInt)) {
+                return symbolTable.get(i).get(symbolInt);
             }
         }
         
-        // return retVal;
         return null; 
     }
 
