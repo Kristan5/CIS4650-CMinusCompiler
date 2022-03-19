@@ -68,13 +68,7 @@ public class SymbolTable {
         return null; 
     }
 
-    /* Print the scope
-    **************************************
-    **************************************
-            FINISH THIS
-    **************************************
-    **************************************
-    */
+    // Print the scope
     public void printScope(int level) {
         int length = symbolTable.size();
 
