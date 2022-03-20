@@ -51,29 +51,39 @@ public class SymbolTable {
     // Add a symbol to the hashmap
     public void addSymbol(String id, Symbol symb) {
         int length = symbolTable.size() -1;
-        symbolTable.get(length).put(id, symb);
+        getScope(length).put(id, symb);
     }
 
     // Retrieve the symbol from the scope its in
     public Symbol getSymbol(String symbol) {
-        // TODO: Should this be symbolTable.size() -1; ???
-        int length = symbolTable.size();
+        int length = symbolTable.size() -1;
 
-        for(int i = length - 1; i >= 0; i--) {
-            if(symbolTable.get(i).containsKey(symbol)) {
-                return symbolTable.get(i).get(symbol);
+        for(int i = length; i >= 0; i--) {
+            if(getScope(i).containsKey(symbol)) {
+                return getScope(i).get(symbol);
             }
         }
         
         return null; 
     }
 
+    // Get functions (on tree level 0) 
+    public Symbol getFunction(String symbol) {
+        return getScope(0).get(symbol);
+    }
+
+    // check if a symbol is in the same scope as another symbol being called 
+    public boolean isSameScope(String symbol) {
+        int length = symbolTable.size() -1;
+        return getScope(length).containsKey(symbol);
+    }
+
     // Print the scope
     public void printScope(int level) {
         int length = symbolTable.size();
 
-        for(String k : symbolTable.get(length - 1).keySet()) {
-            Symbol symb = symbolTable.get(length - 1).get(k);
+        for(String k : getScope(length - 1).keySet()) {
+            Symbol symb = getScope(length - 1).get(k);
 
             if(symb instanceof ArraySymbol) {
                 ArraySymbol arrSymb = (ArraySymbol)symb;
@@ -100,5 +110,9 @@ public class SymbolTable {
                 System.out.println(")");
             }
         }
+    }
+
+    private HashMap<String, Symbol> getScope(int id) {
+        return symbolTable.get(id);
     }
 }

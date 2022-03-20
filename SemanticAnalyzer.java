@@ -201,19 +201,44 @@ public class SemanticAnalyzer {
 
   // Return Expression
   public void visit( ReturnExp exp) {
-    // if () {
-
-    // }
-
-
-    // if (exp.test != null) {
-    //   visit(exp.test);
-    // }
+    // If void function returns something
+    if (functionReturnType == Type.VOID) {
+      if (exp.test != null) {
+        this.hasErrors = true; 
+        int row = exp.row + 1; 
+        System.err.println("Error: Function with VOID return type returns value on line: " + row);
+        return; 
+      }
+    }
+    else {
+      if (exp.test == null) {
+        this.hasErrors = true; 
+        int row = exp.row + 1; 
+        System.err.println("Error: Function with Non-Void (INT) return type returns nothing on line" + row); 
+      }
+      else {
+        visit(exp.test);
+      }
+    }
   }
 
   // Simple Declaration
   public void visit( SimpleDec exp) {
-    // visit(exp.type);
+    int type = exp.type.type;
+    String name = exp.name;
+
+    // Mismatched types: 
+
+    // Redeclaration: 
+    if (symbolTable.isSameScope(name)) {
+      this.hasErrors = true; 
+      int row = exp.row + 1; 
+      System.err.println("Error: Redeclaration of variable '" + name + "' on line" + row); 
+      return;
+    }
+
+    VarSymbol varSymbol = new VarSymbol(type, name);
+    symbolTable.addSymbol(name, (Symbol)varSymbol);
   }
   
   // Simple Variable
