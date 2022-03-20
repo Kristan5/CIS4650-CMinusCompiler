@@ -50,8 +50,8 @@ public class SymbolTable {
 
     // Add a symbol to the hashmap
     public void addSymbol(String id, Symbol symb) {
-        int length = symbolTable.size();
-        symbolTable.get(length - 1).put(id, symb);
+        int length = symbolTable.size() -1;
+        symbolTable.get(length).put(id, symb);
     }
 
     // Retrieve the symbol from the scope its in

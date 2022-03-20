@@ -6,11 +6,18 @@ import symbol.*;
 // TODO: Add exitscope() method call to compound exp after symbol table implementation
 public class SemanticAnalyzer {
   private SymbolTable symbolTable; 
-  private boolean functionReturnType; 
+  private int functionReturnType; 
+
+  private boolean hasMain;
+  private boolean hasErrors;
 
   public SemanticAnalyzer(boolean SHOW_SYM, DecList result) {
     // Will need to add SHOW_SYM boolean to SymbolTable params
     symbolTable = new SymbolTable(SHOW_SYM);
+    
+    this.hasMain = false; 
+    this.hasErrors = false; 
+
     // Start visiting declist
     visit(result);
   }
@@ -72,14 +79,24 @@ public class SemanticAnalyzer {
 
   // Declaration List Expression
   public void visit( DecList decList) {
-    // symbolTable.newScope(); 
+    // System.out.println("DecList");
+    symbolTable.newScope(); 
+    
+    // TODO: CHECK INPUT/ OUTPUT FUCNTION???
     
     while(decList != null) {
-      if(decList.head != null){
+      if(decList.head != null)
         visit(decList.head);
-      }
       decList = decList.tail;
     }
+
+    // Check Main Function
+    if (!this.hasMain) {
+      this.hasErrors = true; 
+      System.err.println("Error: File does not have a main function");
+    }
+
+    symbolTable.delCurrScope();
   }
   
   // Declaration
@@ -93,7 +110,6 @@ public class SemanticAnalyzer {
 
   // Expression
   public void visit( Exp exp) {
-    // Might have to change this
     if(exp instanceof ReturnExp) {
       visit((ReturnExp)exp);
     } else if(exp instanceof CompoundExp) {
@@ -117,32 +133,45 @@ public class SemanticAnalyzer {
 
   // Function Expression
   public void visit( FunctionDec exp) {
-    ArrayList<Symbol> functionParams = new ArrayList<Symbol>();
-    VarDecList param_list = exp.param_list; 
+    // Adding params for function
+    ArrayList<Symbol> functionParams = addFunctionParams(exp.param_list);
+    // Adding function to table
+    int type = exp.type.type;
+    String name = exp.function;
+    FunctionSymbol functionSymbol = new FunctionSymbol(type, name, functionParams); 
+    symbolTable.addSymbol(name, (Symbol)functionSymbol);
+    symbolTable.newScope();
     
-    // Iterate through function params
-    while (param_list != null) {
-      if (param_list.head instanceof SimpleDec) {
-        int type = param_list.head.type.type;
-        String name = param_list.head.name;
-        VarSymbol param = new VarSymbol(type, name, -1);
-        functionParams.add(param);
-      }
-      else if (param_list.head instanceof ArrayDec) {
-        int type = param_list.head.type.type;
-        String name = param_list.head.name;
-        ArraySymbol param = new ArraySymbol(type, name, -1);
-        functionParams.add(param);
-      }
-    }
+    // Setting FunctionReturnType
+    functionReturnType = type;
 
+    if (name.equals("main")) hasMain = true; 
 
-
-
-    // visit(exp.type);    
-    // visit(exp.param_list);
-    // visit(exp.test);
+    // Analyze param_list 
+    visit(exp.param_list);
+    // Analyze function body (CompoundExp)
+    visit((CompoundExp)exp.test, functionSymbol);
   }
+
+  // Compound Expression
+  public void visit( CompoundExp exp, FunctionSymbol function) {
+    // TODO: NEED TO FIGURE OUT WAY TO CHECK IF GETS TO END OF FUNCTION WITHOUT RETURN
+    boolean nonVoid;
+
+    if (function.type == Type.INT) nonVoid = true; 
+    else nonVoid = false; 
+
+    visit(exp.decList);
+    visit(exp.expList);
+
+    symbolTable.delCurrScope();
+  }
+
+  // TODO: NEED TO IMPLEMENT THIS??
+  // public void visit( CompoundExp exp, boolean CHANGETHIS) {
+  //   boolean nonVoid = false; 
+
+  // }
 
   // Index Variable
   public void visit( IndexVar exp) {
@@ -152,10 +181,12 @@ public class SemanticAnalyzer {
 
     if (sym != null) {
       if (!(sym instanceof ArraySymbol)) {
+        this.hasErrors = true; 
         System.err.println("Error: Line " + row + ": " + exp.name + " is not an array");
       }
     }
     else {
+      this.hasErrors = true; 
       System.err.println("");
     }
 
@@ -248,5 +279,30 @@ public class SemanticAnalyzer {
     // Might have to change this:
 
     //symbolTable.exitScope(); 
+  }
+
+  /* ------------------------- HELPER FUNCTIONS ------------------------- */
+
+  private ArrayList<Symbol> addFunctionParams(VarDecList param_list) {
+    ArrayList<Symbol> functionParams = new ArrayList<Symbol>();
+    
+    // Iterate through function params creating symbols for variables
+    while (param_list != null) {
+      if (param_list.head instanceof SimpleDec) {
+        int var_type = param_list.head.type.type;
+        String var_name = param_list.head.name;
+        VarSymbol param = new VarSymbol(var_type, var_name, -1);
+        functionParams.add(param);
+      }
+      else if (param_list.head instanceof ArrayDec) {
+        int array_type = param_list.head.type.type;
+        String array_name = param_list.head.name;
+        ArraySymbol param = new ArraySymbol(array_type, array_name, -1);
+        functionParams.add(param);
+      }
+      param_list = param_list.tail;
+    }
+
+    return functionParams;
   }
 }

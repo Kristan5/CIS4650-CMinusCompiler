@@ -1,13 +1,16 @@
 package symbol; 
 
 public class VarSymbol extends Symbol {
+  public int offset; 
   
   public VarSymbol(int type, String id) {
     this.type = type;
     this.id = id;
   }
 
-  public VarSymbol() {
-
+  public VarSymbol(int type, String id, int offset) {
+    this.type = type;
+    this.id = id;
+    this.offset = offset;
   }
 }
