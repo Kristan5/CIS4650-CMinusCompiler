@@ -1,10 +1,12 @@
+import java.util.ArrayList;
+
 import absyn.*; 
 import symbol.*; 
 
 // TODO: Add exitscope() method call to compound exp after symbol table implementation
 public class SemanticAnalyzer {
   private SymbolTable symbolTable; 
-
+  private boolean functionReturnType; 
 
   public SemanticAnalyzer(boolean SHOW_SYM, DecList result) {
     // Will need to add SHOW_SYM boolean to SymbolTable params
@@ -115,6 +117,28 @@ public class SemanticAnalyzer {
 
   // Function Expression
   public void visit( FunctionDec exp) {
+    ArrayList<Symbol> functionParams = new ArrayList<Symbol>();
+    VarDecList param_list = exp.param_list; 
+    
+    // Iterate through function params
+    while (param_list != null) {
+      if (param_list.head instanceof SimpleDec) {
+        int type = param_list.head.type.type;
+        String name = param_list.head.name;
+        VarSymbol param = new VarSymbol(type, name, -1);
+        functionParams.add(param);
+      }
+      else if (param_list.head instanceof ArrayDec) {
+        int type = param_list.head.type.type;
+        String name = param_list.head.name;
+        ArraySymbol param = new ArraySymbol(type, name, -1);
+        functionParams.add(param);
+      }
+    }
+
+
+
+
     // visit(exp.type);    
     // visit(exp.param_list);
     // visit(exp.test);
@@ -146,6 +170,10 @@ public class SemanticAnalyzer {
 
   // Return Expression
   public void visit( ReturnExp exp) {
+    // if () {
+
+    // }
+
 
     // if (exp.test != null) {
     //   visit(exp.test);
