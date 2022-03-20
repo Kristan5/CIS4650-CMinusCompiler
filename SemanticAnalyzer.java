@@ -167,6 +167,18 @@ public class SemanticAnalyzer {
     symbolTable.delCurrScope();
   }
 
+  //Compound Expression
+  public void visit( CompoundExp exp) {
+    symbolTable.newScope();
+    visit(exp.decList);
+    visit(exp.expList);
+
+
+    // Might have to change this:
+
+    //symbolTable.exitScope(); 
+  }
+
   // TODO: NEED TO IMPLEMENT THIS??
   // public void visit( CompoundExp exp, boolean CHANGETHIS) {
   //   boolean nonVoid = false; 
@@ -292,18 +304,6 @@ public class SemanticAnalyzer {
     // Might have to change this
     visit(exp.test);
     visit(exp.block);
-  }
-
-  //Compound Expression
-  public void visit( CompoundExp exp) {
-    symbolTable.newScope();
-    visit(exp.decList);
-    visit(exp.expList);
-
-
-    // Might have to change this:
-
-    //symbolTable.exitScope(); 
   }
 
   /* ------------------------- HELPER FUNCTIONS ------------------------- */
