@@ -1,4 +1,5 @@
-/* this file has a variable declared as void, should create void var declaration error  */
+/* this file has a variable declared as void and two undefined functions, should create void var declaration error
+** and undefined function output error */
 
 void main(void) {
   int x; int fac;

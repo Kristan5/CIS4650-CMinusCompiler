@@ -6,9 +6,9 @@ void main(void) {
     int c;
     int big;
 
-    a = input();
-    b = input();
-    c = input();
+    a = 12;
+    b = 7;
+    c = 15;
 
     if(a >= b) {
         if(a >= c) {
