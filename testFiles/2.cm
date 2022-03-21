@@ -1,9 +1,15 @@
+/* FAULTS: */
 /* this file is trying to index a non-array variable */
+/* this file has the wrong number of parameters for function add() */
+/* this file has a method that was not defined (minus) */
+
+int add(int a, int b) {
+  return a + b;
+}
 
 void main(void) {
-  int x;
+  int x; int fac; 
   x = input();
-  fac = 1;
   
   while (x > 1) {
     fac = fac * x;
@@ -12,4 +18,7 @@ void main(void) {
   } 
 
   output(fac);
+
+  add(1, 2, 3);
+  minus();
 }

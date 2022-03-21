@@ -1,9 +1,12 @@
 import java.util.ArrayList;
 
+import javax.xml.stream.events.EndDocument;
+
 import absyn.*; 
 import symbol.*; 
 
-// TODO: Add exitscope() method call to compound exp after symbol table implementation
+// TODO: FIGURE OUT GLOBAL SCOPE ISSUE make ex3 (calling parent scope variable in child scope)
+
 public class SemanticAnalyzer {
   private SymbolTable symbolTable; 
   private int functionReturnType; 
@@ -32,13 +35,26 @@ public class SemanticAnalyzer {
 
   // ArrayDec
   public void visit( ArrayDec expList) {
-    
-    
-    // visit(expList.type);
-    
-    // if(expList.size != null) {
-    //   visit(expList.size);
-    // }
+    int type = expList.type.type;
+    String name = expList.name;
+    int size = expList.size.value;
+    int row = expList.row + 1; 
+
+    // Mismatched types: 
+    if (type == Type.VOID) {
+      setHasErrors(); 
+      System.err.println("Error: Variable: '" + name + "' was declared as void on line: " + row);       
+    }
+
+    // Redeclaration: 
+    if (symbolTable.isSameScope(name)) {
+      setHasErrors();
+      System.err.println("Error: Redeclaration of variable '" + name + "' on line: " + row); 
+      return;
+    }
+
+    ArraySymbol varSymbol = new ArraySymbol(type, name, size);
+    symbolTable.addSymbol(name, (Symbol)varSymbol);
   }
 
   // Assign Expression
@@ -56,12 +72,6 @@ public class SemanticAnalyzer {
       visit(exp.elsepart);
     }
   }
-  
-  // Int Expression
-  public void visit( IntExp exp) {
-
-
-  }
 
   // Operation Expression
   public void visit( OpExp exp) {    
@@ -74,7 +84,7 @@ public class SemanticAnalyzer {
     String name = exp.function;
     int row = exp.row + 1; 
     FunctionSymbol functionSymbol = (FunctionSymbol)symbolTable.getFunction(name);
-    // int functionSymbolParamsCount = functionSymbol.params.size();
+    int functionSymbolParamsCount = symbolTable.getFunctionParamCount(name);
     int callExpParamsCount = exp.params_count(); 
 
     // Check if function exists
@@ -83,13 +93,14 @@ public class SemanticAnalyzer {
       System.err.println("Error: Undefined function '" + name + "' on line: " + row); 
     }
     
-    // Check if signature correct (if number of arguments is correct)
-    // if (functionSymbolParamsCount != callExpParamsCount) {
-
-    // }
+    // Check if signature correct (if number of arguments is correct)F
+    if (functionSymbolParamsCount != callExpParamsCount) {
+      setHasErrors();
+      System.err.println("Error: Wrong number of parameters for function '" + name + "' on line: " + row); 
+    }
 
     // Check if params are correct 
-    // checkFunctionCallParams(); 
+    checkFunctionCallParams(exp.args, functionSymbol, functionSymbolParamsCount); 
 
   }
 
@@ -98,8 +109,16 @@ public class SemanticAnalyzer {
     // System.out.println("DecList");
     symbolTable.newScope(); 
     
-    // TODO: CHECK INPUT/ OUTPUT FUNCTION???
+    // input() and output() functions
+    FunctionSymbol input = new FunctionSymbol(Type.INT, "input", new ArrayList<Symbol>());
+    symbolTable.addSymbol("input", input);
     
+    ArrayList<Symbol> params = new ArrayList<Symbol>();
+    params.add(new VarSymbol(Type.INT, ""));
+    
+    FunctionSymbol output = new FunctionSymbol(Type.VOID, "output", params);
+    symbolTable.addSymbol("output", output);
+
     while(decList != null) {
       if(decList.head != null)
         visit(decList.head);
@@ -140,8 +159,6 @@ public class SemanticAnalyzer {
       visit((OpExp)exp);
     } else if(exp instanceof CallExp) {
       visit((CallExp)exp);
-    } else if(exp instanceof IntExp) {
-      visit((IntExp)exp);
     } else if(exp instanceof VarExp) {
       visit((VarExp)exp);
     }
@@ -188,17 +205,8 @@ public class SemanticAnalyzer {
     symbolTable.newScope();
     visit(exp.decList);
     visit(exp.expList);
-
-
-
     symbolTable.delCurrScope(); 
   }
-
-  // TODO: NEED TO IMPLEMENT THIS??
-  // public void visit( CompoundExp exp, boolean CHANGETHIS) {
-  //   boolean nonVoid = false; 
-
-  // }
 
   // Index Variable
   public void visit( IndexVar exp) {
@@ -236,7 +244,7 @@ public class SemanticAnalyzer {
       if (exp.test == null) {
         setHasErrors(); 
         int row = exp.row + 1; 
-        System.err.println("Error: Function with Non-Void (INT) return type returns nothing on lin:e: " + row); 
+        System.err.println("Error: Function with Non-Void (INT) return type returns nothing on line: " + row); 
       }
       else {
         visit(exp.test);
@@ -346,6 +354,7 @@ public class SemanticAnalyzer {
         int var_type = param_list.head.type.type;
         String var_name = param_list.head.name;
         VarSymbol param = new VarSymbol(var_type, var_name, -1);
+
         functionParams.add(param);
       }
       else if (param_list.head instanceof ArrayDec) {
@@ -362,5 +371,16 @@ public class SemanticAnalyzer {
 
   private void setHasErrors() {
     this.hasErrors = true;
+  }
+
+  private void checkFunctionCallParams(ExpList params, FunctionSymbol functionSymbol, int functionSymbolParamsCount) {
+    for (int i = 0; i < functionSymbolParamsCount; i ++) {
+      Exp param = params.head;
+      Symbol symbol = functionSymbol.params.get(i);
+      
+      if (symbol instanceof VarSymbol) visit(param);
+
+      params = params.tail;
+    }
   }
 }

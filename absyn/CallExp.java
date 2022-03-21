@@ -15,6 +15,12 @@ public class CallExp extends Exp {
     }
       
     public int params_count() {
-        return 0;
+        int count = 0; 
+        ExpList temp = this.args; 
+        while (temp != null) {
+            temp = temp.tail; 
+            count++; 
+        }
+        return count; 
     }
 }

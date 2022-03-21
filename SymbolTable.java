@@ -79,6 +79,14 @@ public class SymbolTable {
         return result;
     }
 
+    public int getFunctionParamCount(String symbol) {
+        FunctionSymbol function = (FunctionSymbol) getFunction(symbol);
+        
+        if (function != null) return function.params.size(); 
+
+        return 0;
+    }
+
     // check if a symbol is in the same scope as another symbol being called 
     public boolean isSameScope(String symbol) {
         int length = symbolTable.size() -1;

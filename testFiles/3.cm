@@ -1,4 +1,6 @@
+/* FAULTS: */
 /* this file has no main function, should create no main function error  */
+/* this file has a void return type, but tries to return an int */
 
 void lost(void) {
     int x;
@@ -7,4 +9,5 @@ void lost(void) {
     while(x > 11) {
         x = 2;
     }
+    return x;
 }

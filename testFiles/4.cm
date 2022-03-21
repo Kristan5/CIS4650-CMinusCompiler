@@ -1,9 +1,13 @@
-/* this file has a variable declared as void and two undefined functions, should create void var declaration error
-** and undefined function output error */
+/* this file has an invalid array declaration (no size within [])*/
+/* this file has a variable declared as void should create void var declaration error */
+/* this file is trying to assign an integer to an array */
 
 void main(void) {
   int x; int fac;
   void i;
+  int arr[];
+
+  arr = 3;
 
   x = input();
   fac = 1;
