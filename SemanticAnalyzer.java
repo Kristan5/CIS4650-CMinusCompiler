@@ -9,7 +9,7 @@ public class SemanticAnalyzer {
   private int functionReturnType; 
 
   private boolean hasMain;
-  private boolean hasErrors;
+  public boolean hasErrors;
 
   public SemanticAnalyzer(boolean SHOW_SYM, DecList result) {
     // Will need to add SHOW_SYM boolean to SymbolTable params
@@ -71,9 +71,24 @@ public class SemanticAnalyzer {
 
   // Call Expression
   public void visit( CallExp exp) {
-    
+    String name = exp.function;
+    int row = exp.row + 1; 
+    FunctionSymbol functionSymbol = (FunctionSymbol)symbolTable.getFunction(name);
 
-    visit(exp.args);
+    // Check if function exists
+    if (symbolTable.getFunction(name) == null) {
+      setHasErrors();
+      System.err.println("Error: Undefined function '" + name + "' on line: " + row); 
+    }
+    
+    // Check if signature correct (if number of arguments is correct)
+    // if (functionSymbol.params.size() != exp.) {
+
+    // }
+
+    // Check if params are correct 
+    // checkFunctionCallParams(); 
+
   }
 
   // Declaration List Expression
@@ -81,7 +96,7 @@ public class SemanticAnalyzer {
     // System.out.println("DecList");
     symbolTable.newScope(); 
     
-    // TODO: CHECK INPUT/ OUTPUT FUCNTION???
+    // TODO: CHECK INPUT/ OUTPUT FUNCTION???
     
     while(decList != null) {
       if(decList.head != null)
@@ -254,8 +269,8 @@ public class SemanticAnalyzer {
   // Simple Variable
   public void visit( SimpleVar exp) {
     String name = exp.name;
-    int row = exp.row;
-    
+    int row = exp.row + 1;
+
     if (symbolTable.getSymbol(name) != null) {
       if (symbolTable.getSymbol(name) instanceof VarSymbol) {
         if (symbolTable.getSymbol(name).type != Type.INT) {
