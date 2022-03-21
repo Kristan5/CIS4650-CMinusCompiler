@@ -1,11 +1,7 @@
 import java.util.ArrayList;
 
-import javax.xml.stream.events.EndDocument;
-
 import absyn.*; 
 import symbol.*; 
-
-// TODO: FIGURE OUT GLOBAL SCOPE ISSUE make ex3 (calling parent scope variable in child scope)
 
 public class SemanticAnalyzer {
   private SymbolTable symbolTable; 
@@ -65,7 +61,6 @@ public class SemanticAnalyzer {
 
   // If Expression
   public void visit( IfExp exp) {
-    // Might have to change this
     visit(exp.test);
     visit(exp.thenpart);
     if (exp.elsepart != null ){

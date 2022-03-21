@@ -40,6 +40,8 @@ public class SymbolTable {
 
     // Delete and exit the scope you're in
     public void delCurrScope() {
+        if (SHOW_SYM) printScope(symbolTable.size()); 
+
         int tableLength = symbolTable.size();
 
         // Make sure there's items in list
