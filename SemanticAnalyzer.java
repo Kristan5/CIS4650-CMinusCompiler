@@ -65,7 +65,6 @@ public class SemanticAnalyzer {
 
   // Operation Expression
   public void visit( OpExp exp) {    
-    // Might have to change this
     visit(exp.left);
     visit(exp.right);
   }
@@ -204,11 +203,6 @@ public class SemanticAnalyzer {
     visit(exp.index);
 
   }
-  
-  // // Nil Expression
-  // public void visit( NilExp exp) {
-  
-  // }
 
   // Return Expression
   public void visit( ReturnExp exp) {
@@ -261,11 +255,13 @@ public class SemanticAnalyzer {
   public void visit( SimpleVar exp) {
     String name = exp.name;
     int row = exp.row;
-    // TODO: CHECK IF THIS WORKS
+    
     if (symbolTable.getSymbol(name) != null) {
-      if (symbolTable.getSymbol(name) instanceof VarSymbol && symbolTable.getSymbol(name).type != Type.INT) {
-        setHasErrors(); 
-        System.err.println("Error: Expected integer instead of void variable '" + name + "' on line: " + row); 
+      if (symbolTable.getSymbol(name) instanceof VarSymbol) {
+        if (symbolTable.getSymbol(name).type != Type.INT) {
+          setHasErrors(); 
+          System.err.println("Error: Expected integer instead of void variable '" + name + "' on line: " + row); 
+        }
       }
       else if (symbolTable.getSymbol(name).type != Type.INT) {
         setHasErrors();
@@ -281,15 +277,7 @@ public class SemanticAnalyzer {
       System.err.println("Error: Undefined variable '" + name + "' on line: " + row); 
     }
   }
-  
-  // public void visit( Type exp) {
-  //   // if(exp.type == Type.INT) { 
 
-  //   // } else {
-
-  //   // }
-  // }
-  
   // Variable
   public void visit( Var exp) {
     if(exp instanceof IndexVar) {
