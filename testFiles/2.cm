@@ -1,13 +1,14 @@
-/* this file has an missing semi colon in the first variable declaration */
+/* this file is trying to index a non-array variable */
 
 void main(void) {
-  int x
+  int x;
   x = input();
   fac = 1;
   
   while (x > 1) {
     fac = fac * x;
     x = x - 1;
+    fac[1];
   } 
 
   output(fac);

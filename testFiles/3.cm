@@ -1,3 +1,11 @@
-/* this file has an invalid body, should create invalid compound exp error  */
+/* this file has no main function, should create no main function error  */
 
-int main(void) 
+void lost(void) {
+    int x;
+    x = 21;
+    int p;
+
+    if(x < 12) {
+        p = 7744;
+    }
+}

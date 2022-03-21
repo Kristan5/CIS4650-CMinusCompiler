@@ -1,8 +1,9 @@
-/* this file has an invalid array size, should create invalid array size error  */
+/* this file has a variable declared as void, should create void var declaration error  */
 
 void main(void) {
   int x; int fac;
-  int a[];
+  void i;
+
   x = input();
   fac = 1;
   
