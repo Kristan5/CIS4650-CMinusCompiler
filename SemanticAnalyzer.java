@@ -9,7 +9,7 @@ public class SemanticAnalyzer {
   private int functionReturnType; 
 
   private boolean hasMain;
-  private boolean hasErrors;
+  public boolean hasErrors;
 
   public SemanticAnalyzer(boolean SHOW_SYM, DecList result) {
     // Will need to add SHOW_SYM boolean to SymbolTable params
@@ -65,16 +65,30 @@ public class SemanticAnalyzer {
 
   // Operation Expression
   public void visit( OpExp exp) {    
-    // Might have to change this
     visit(exp.left);
     visit(exp.right);
   }
 
   // Call Expression
   public void visit( CallExp exp) {
-    
+    String name = exp.function;
+    int row = exp.row + 1; 
+    FunctionSymbol functionSymbol = (FunctionSymbol)symbolTable.getFunction(name);
 
-    visit(exp.args);
+    // Check if function exists
+    if (symbolTable.getFunction(name) == null) {
+      setHasErrors();
+      System.err.println("Error: Undefined function '" + name + "' on line: " + row); 
+    }
+    
+    // Check if signature correct (if number of arguments is correct)
+    // if (functionSymbol.params.size() != exp.) {
+
+    // }
+
+    // Check if params are correct 
+    // checkFunctionCallParams(); 
+
   }
 
   // Declaration List Expression
@@ -82,7 +96,7 @@ public class SemanticAnalyzer {
     // System.out.println("DecList");
     symbolTable.newScope(); 
     
-    // TODO: CHECK INPUT/ OUTPUT FUCNTION???
+    // TODO: CHECK INPUT/ OUTPUT FUNCTION???
     
     while(decList != null) {
       if(decList.head != null)
@@ -204,11 +218,6 @@ public class SemanticAnalyzer {
     visit(exp.index);
 
   }
-  
-  // // Nil Expression
-  // public void visit( NilExp exp) {
-  
-  // }
 
   // Return Expression
   public void visit( ReturnExp exp) {
@@ -260,12 +269,14 @@ public class SemanticAnalyzer {
   // Simple Variable
   public void visit( SimpleVar exp) {
     String name = exp.name;
-    int row = exp.row;
-    // TODO: CHECK IF THIS WORKS
+    int row = exp.row + 1;
+
     if (symbolTable.getSymbol(name) != null) {
-      if (symbolTable.getSymbol(name) instanceof VarSymbol && symbolTable.getSymbol(name).type != Type.INT) {
-        setHasErrors(); 
-        System.err.println("Error: Expected integer instead of void variable '" + name + "' on line: " + row); 
+      if (symbolTable.getSymbol(name) instanceof VarSymbol) {
+        if (symbolTable.getSymbol(name).type != Type.INT) {
+          setHasErrors(); 
+          System.err.println("Error: Expected integer instead of void variable '" + name + "' on line: " + row); 
+        }
       }
       else if (symbolTable.getSymbol(name).type != Type.INT) {
         setHasErrors();
@@ -281,15 +292,7 @@ public class SemanticAnalyzer {
       System.err.println("Error: Undefined variable '" + name + "' on line: " + row); 
     }
   }
-  
-  // public void visit( Type exp) {
-  //   // if(exp.type == Type.INT) { 
 
-  //   // } else {
-
-  //   // }
-  // }
-  
   // Variable
   public void visit( Var exp) {
     if(exp instanceof IndexVar) {

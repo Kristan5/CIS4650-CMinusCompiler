@@ -69,7 +69,14 @@ public class SymbolTable {
 
     // Get functions (on tree level 0) 
     public Symbol getFunction(String symbol) {
-        return getScope(0).get(symbol);
+        Symbol result = null; 
+        try {
+            result = getScope(0).get(symbol);
+        }
+        catch (Exception e) {
+            
+        }
+        return result;
     }
 
     // check if a symbol is in the same scope as another symbol being called 
