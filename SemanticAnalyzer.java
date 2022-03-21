@@ -74,8 +74,8 @@ public class SemanticAnalyzer {
     String name = exp.function;
     int row = exp.row + 1; 
     FunctionSymbol functionSymbol = (FunctionSymbol)symbolTable.getFunction(name);
-    int functionSymbolParamsCount = functionSymbol.params.size();
-    // int callExpParamsCount = exp.params_count(); 
+    // int functionSymbolParamsCount = functionSymbol.params.size();
+    int callExpParamsCount = exp.params_count(); 
 
     // Check if function exists
     if (symbolTable.getFunction(name) == null) {

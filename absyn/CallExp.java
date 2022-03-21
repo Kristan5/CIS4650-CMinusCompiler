@@ -14,4 +14,7 @@ public class CallExp extends Exp {
         visitor.visit( this, level );
     }
       
+    public int params_count() {
+        return 0;
+    }
 }
