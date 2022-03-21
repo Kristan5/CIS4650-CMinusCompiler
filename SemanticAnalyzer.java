@@ -92,7 +92,7 @@ public class SemanticAnalyzer {
 
     // Check Main Function
     if (!this.hasMain) {
-      this.hasErrors = true; 
+      setHasErrors(); 
       System.err.println("Error: File does not have a main function");
     }
 
@@ -174,9 +174,8 @@ public class SemanticAnalyzer {
     visit(exp.expList);
 
 
-    // Might have to change this:
 
-    //symbolTable.exitScope(); 
+    symbolTable.delCurrScope(); 
   }
 
   // TODO: NEED TO IMPLEMENT THIS??
@@ -193,12 +192,12 @@ public class SemanticAnalyzer {
 
     if (sym != null) {
       if (!(sym instanceof ArraySymbol)) {
-        this.hasErrors = true; 
+        setHasErrors(); 
         System.err.println("Error: Line " + row + ": " + exp.name + " is not an array");
       }
     }
     else {
-      this.hasErrors = true; 
+      setHasErrors(); 
       System.err.println("");
     }
 
@@ -216,7 +215,7 @@ public class SemanticAnalyzer {
     // If void function returns something
     if (functionReturnType == Type.VOID) {
       if (exp.test != null) {
-        this.hasErrors = true; 
+        setHasErrors(); 
         int row = exp.row + 1; 
         System.err.println("Error: Function with VOID return type returns value on line: " + row);
         return; 
@@ -224,9 +223,9 @@ public class SemanticAnalyzer {
     }
     else {
       if (exp.test == null) {
-        this.hasErrors = true; 
+        setHasErrors(); 
         int row = exp.row + 1; 
-        System.err.println("Error: Function with Non-Void (INT) return type returns nothing on line" + row); 
+        System.err.println("Error: Function with Non-Void (INT) return type returns nothing on lin:e: " + row); 
       }
       else {
         visit(exp.test);
@@ -240,12 +239,17 @@ public class SemanticAnalyzer {
     String name = exp.name;
 
     // Mismatched types: 
+    if (type == Type.VOID) {
+      setHasErrors(); 
+      int row = exp.row + 1; 
+      System.err.println("Error: Variable: '" + name + "' was declared as void on line: " + row);       
+    }
 
     // Redeclaration: 
     if (symbolTable.isSameScope(name)) {
-      this.hasErrors = true; 
+      setHasErrors(); 
       int row = exp.row + 1; 
-      System.err.println("Error: Redeclaration of variable '" + name + "' on line" + row); 
+      System.err.println("Error: Redeclaration of variable '" + name + "' on line: " + row); 
       return;
     }
 
@@ -255,7 +259,27 @@ public class SemanticAnalyzer {
   
   // Simple Variable
   public void visit( SimpleVar exp) {
-
+    String name = exp.name;
+    int row = exp.row;
+    // TODO: CHECK IF THIS WORKS
+    if (symbolTable.getSymbol(name) != null) {
+      if (symbolTable.getSymbol(name) instanceof VarSymbol && symbolTable.getSymbol(name).type != Type.INT) {
+        setHasErrors(); 
+        System.err.println("Error: Expected integer instead of void variable '" + name + "' on line: " + row); 
+      }
+      else if (symbolTable.getSymbol(name).type != Type.INT) {
+        setHasErrors();
+        System.err.println("Error: Expected integer instead of void Array variable '" + name + "' on line: " + row); 
+      }
+      else {
+        setHasErrors();
+        System.err.println("Error: Can't convert array '" + name + "' to int on line: " + row); 
+      }
+    }
+    else {
+      setHasErrors(); 
+      System.err.println("Error: Undefined variable '" + name + "' on line: " + row); 
+    }
   }
   
   // public void visit( Type exp) {
@@ -329,5 +353,9 @@ public class SemanticAnalyzer {
     }
 
     return functionParams;
+  }
+
+  private void setHasErrors() {
+    this.hasErrors = true;
   }
 }
