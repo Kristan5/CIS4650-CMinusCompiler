@@ -3,9 +3,8 @@
 void lost(void) {
     int x;
     x = 21;
-    int p;
-
-    if(x < 12) {
-        p = 7744;
+    
+    while(x > 11) {
+        x = 2;
     }
 }
