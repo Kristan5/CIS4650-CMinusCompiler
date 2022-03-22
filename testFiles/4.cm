@@ -13,6 +13,7 @@ void main(void) {
   fac = 1;
   
   while (x > 1) {
+    int a; 
     fac = fac * x;
     x = x - 1;
   } 

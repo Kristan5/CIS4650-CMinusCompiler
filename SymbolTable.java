@@ -8,6 +8,7 @@ import java.util.Set;
 public class SymbolTable {
     private ArrayList<HashMap<String, Symbol>> symbolTable;
     private boolean SHOW_SYM;
+    public String symbolTableToString = "";
 
     final static int SPACES = 4;
 
@@ -17,10 +18,12 @@ public class SymbolTable {
     }
 
     // Make indentation
-    private void indent(int level) {
+    private String indent(int level) {
+        String result = "";
         for( int i = 0; i < level * SPACES; i++ ) {
-            System.out.print(" ");   
+            result += (" ");   
         }
+        return result; 
     }
 
     // Get the type
@@ -42,8 +45,9 @@ public class SymbolTable {
     public void delCurrScope() {
         if (SHOW_SYM) {
             int level = symbolTable.size();
-            indent(level - 1);
-            System.out.println("Existing Scope: " + level);
+            // indent(level - 1);
+            symbolTableToString += (indent(level - 1) + "Showing Scope Level: " + level + "\n");
+            // System.out.println(symbolTableToString);
             printScope(level); 
         }
 
@@ -103,38 +107,34 @@ public class SymbolTable {
     // Print the scope
     public void printScope(int level) {
         int length = symbolTable.size();
-        ArrayList<String> result = new ArrayList<String>(); 
 
         for(String k : getScope(length - 1).keySet()) {
             Symbol symb = getScope(length - 1).get(k);
 
             if(symb instanceof ArraySymbol) {
                 ArraySymbol arrSymb = (ArraySymbol)symb;
-                indent(level);
-                result.add("Array is " + getType(symb.type) + " " 
-                    + k + "[" + arrSymb.size + "]");
+                // indent(level);
+                symbolTableToString += (indent(level) + "Array is " + getType(symb.type) + " " 
+                    + k + "[" + arrSymb.size + "]" + "\n");
             } else if(symb instanceof VarSymbol) {
                 indent(level);
-                result.add("Variable is " + getType(symb.type) + " " + k);
+                symbolTableToString += (indent(level) + "Variable is " + getType(symb.type) + " " + k+ "\n");
             } else if(symb instanceof FunctionSymbol) {
                 indent(level);
-                result.add("Function is " + getType(symb.type) + " " + k 
+                symbolTableToString += (indent(level) + "Function is " + getType(symb.type) + " " + k 
                     + " (");
 
                 for(Symbol s : ((FunctionSymbol)symb).params) {
                     if(s instanceof ArraySymbol) {
-                        result.add(getType(s.type) + "[]");
+                        symbolTableToString += (getType(s.type) + "[]");
                     }
                     else if(s instanceof VarSymbol){
-                        result.add(getType(s.type));
+                        symbolTableToString += (getType(s.type));
                     }
-                    result.add(",");
+                    symbolTableToString += (",");
                 }
-                result.add(")");
+                symbolTableToString += (")" + "\n");
             }
-        }
-        for (int i = result.size(); i > 0; i--) {
-            System.out.println(result.get(i));
         }
     }
 

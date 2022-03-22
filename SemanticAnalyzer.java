@@ -21,6 +21,10 @@ public class SemanticAnalyzer {
     visit(result);
   }
   
+  public String symbolTableToString() {
+    return symbolTable.symbolTableToString;
+  }
+
   // Expression List
   public void visit( ExpList expList) {
     while( expList != null ) {

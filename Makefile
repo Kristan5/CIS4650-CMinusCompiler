@@ -55,16 +55,16 @@ ex1:
 
 ex2:
 	make remake
-	java -cp /usr/share/java/cup.jar:. Main testFiles/2.cm
+	java -cp /usr/share/java/cup.jar:. Main -s testFiles/2.cm
 
 ex3:
 	make remake
-	java -cp /usr/share/java/cup.jar:. Main testFiles/3.cm
+	java -cp /usr/share/java/cup.jar:. Main -s testFiles/3.cm
 
 ex4:
 	make remake
-	java -cp /usr/share/java/cup.jar:. Main testFiles/4.cm
+	java -cp /usr/share/java/cup.jar:. Main -s testFiles/4.cm
 
 ex5:
 	make remake
-	java -cp /usr/share/java/cup.jar:. Main testFiles/5.cm
+	java -cp /usr/share/java/cup.jar:. Main -s testFiles/5.cm

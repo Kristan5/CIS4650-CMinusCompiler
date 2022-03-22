@@ -103,6 +103,10 @@ program  ::= declaration_list:d
                   
                   // semantic analyzer will always be run, SHOW_SYM boolean will be a parameter to control if output to console or not
                   SemanticAnalyzer analyzer = new SemanticAnalyzer(SHOW_SYM, RESULT); 
+                  if (SHOW_SYM) {
+                     System.out.println("\nShowing Symbol Table:\n");
+                     System.out.println(analyzer.symbolTableToString());
+                  }
 
                   if (!analyzer.hasErrors) System.out.println("Semantic Analysis Complete: No Errors Found");
                   else System.out.println("Semantic Analysis Complete: Errors Found");

@@ -51,12 +51,12 @@ class Main {
       }
       else if (arg.equals("-a")){
         // Show AST
-        System.out.println("Showing Abstract Syntax Tree:");
+        System.out.println("Showing Abstract Syntax Tree:\n");
         SHOW_TREE = true; 
       }
       else if (arg.equals("-s")) {
         // Show Symbol Table
-        System.out.println("Showing Symbol Table:");
+        System.out.println("\n");
         SHOW_SYM = true; 
       }
       else {
