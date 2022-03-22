@@ -40,7 +40,12 @@ public class SymbolTable {
 
     // Delete and exit the scope you're in
     public void delCurrScope() {
-        if (SHOW_SYM) printScope(symbolTable.size()); 
+        if (SHOW_SYM) {
+            int level = symbolTable.size();
+            indent(level - 1);
+            System.out.println("Existing Scope: " + level);
+            printScope(level); 
+        }
 
         int tableLength = symbolTable.size();
 
@@ -98,6 +103,7 @@ public class SymbolTable {
     // Print the scope
     public void printScope(int level) {
         int length = symbolTable.size();
+        ArrayList<String> result = new ArrayList<String>(); 
 
         for(String k : getScope(length - 1).keySet()) {
             Symbol symb = getScope(length - 1).get(k);
@@ -105,27 +111,30 @@ public class SymbolTable {
             if(symb instanceof ArraySymbol) {
                 ArraySymbol arrSymb = (ArraySymbol)symb;
                 indent(level);
-                System.out.println("Array is " + getType(symb.type) + " " 
+                result.add("Array is " + getType(symb.type) + " " 
                     + k + "[" + arrSymb.size + "]");
             } else if(symb instanceof VarSymbol) {
                 indent(level);
-                System.out.println("Variable is " + getType(symb.type) + " " + k);
+                result.add("Variable is " + getType(symb.type) + " " + k);
             } else if(symb instanceof FunctionSymbol) {
                 indent(level);
-                System.out.print("Function is " + getType(symb.type) + " " + k 
+                result.add("Function is " + getType(symb.type) + " " + k 
                     + " (");
 
                 for(Symbol s : ((FunctionSymbol)symb).params) {
                     if(s instanceof ArraySymbol) {
-                        System.out.print(getType(s.type) + "[]");
+                        result.add(getType(s.type) + "[]");
                     }
                     else if(s instanceof VarSymbol){
-                        System.out.print(getType(s.type));
+                        result.add(getType(s.type));
                     }
-                    System.out.print(",");
+                    result.add(",");
                 }
-                System.out.println(")");
+                result.add(")");
             }
+        }
+        for (int i = result.size(); i > 0; i--) {
+            System.out.println(result.get(i));
         }
     }
 
