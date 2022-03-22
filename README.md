@@ -3,7 +3,7 @@ Developers: Kristan Samaroo, Indeep Farma
 
 Semester: W22 
 
-Current Checkpoint: ONE
+Current Checkpoint: TWO
 
 ## Acknowledgements: 
 This code is based off the example provided by Kristan Samaroo and Indeep Farma for the assignment. The 
