@@ -51,7 +51,7 @@ sort:
 
 ex1:
 	make remake
-	java -cp /usr/share/java/cup.jar:. Main -s testFiles/1.cm
+	java -cp /usr/share/java/cup.jar:. Main testFiles/1.cm
 
 ex2:
 	make remake
