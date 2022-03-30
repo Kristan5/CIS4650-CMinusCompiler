@@ -17,6 +17,7 @@ import absyn.*;
 class Main {
   public static boolean SHOW_TREE = false;
   public static boolean SHOW_SYM = false;
+  public static boolean GEN_ASSBLY = false;
 
   public static String filename = null;
 
@@ -30,6 +31,7 @@ class Main {
       // Set flags for showing AST or SymbolTree
       p.filename = filename;
       p.SHOW_SYM = SHOW_SYM;
+      p.GEN_ASSBLY = GEN_ASSBLY;
 
       Absyn result = (Absyn)(p.parse().value);
 
@@ -59,8 +61,13 @@ class Main {
         System.out.println("\n");
         SHOW_SYM = true; 
       }
+      else if (arg.equals("-c")) {
+        // Generate Assembly Code
+        System.out.println("\n");
+        GEN_ASSBLY = true; 
+      }
       else {
-        System.err.println("Error: Please enter a valid argument. {-a, -s}");
+        System.err.println("Error: Please enter a valid argument. {-a, -s, -c}");
       }
     }
   }

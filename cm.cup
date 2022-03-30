@@ -17,6 +17,8 @@ parser code {:
 
   public String filename; 
   public boolean SHOW_SYM;
+  public boolean GEN_ASSBLY;
+  public boolean hasErrors;
   
   /* Change the method report_error so it will display the line and
     column of where the error occurred in the input as well as the
@@ -26,6 +28,9 @@ parser code {:
 
     /* Create a StringBuffer called 'm' with the string 'Error' in it. */
     StringBuffer m = new StringBuffer("Error");
+
+    /* If this parser calls report_errors then there are errors */
+    hasErrors = true; 
 
     /* Check if the information passed to the method is the same
         type as the type java_cup.runtime.Symbol. */
@@ -107,10 +112,14 @@ program  ::= declaration_list:d
                      System.out.println("\nShowing Symbol Table:\n");
                      System.out.println(analyzer.symbolTableToString());
                   }
+                  
+                  if (GEN_ASSBLY && !analyzer.hasErrors && !parser.hasErrors) {
+                     System.out.println("\nGenerating Assembly Code:\n");
+                     AssemblyGenerator generator = new AssemblyGenerator(filename, RESULT);
+                  }
 
                   if (!analyzer.hasErrors) System.out.println("Semantic Analysis Complete: No Errors Found");
                   else System.out.println("Semantic Analysis Complete: Errors Found");
-
                :}
             | ERROR
                {: RESULT = null; :}
