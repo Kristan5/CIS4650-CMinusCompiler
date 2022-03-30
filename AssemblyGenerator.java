@@ -149,10 +149,13 @@ public class AssemblyGenerator {
       visit((CallExp)exp);
     } else if(exp instanceof VarExp) {
       visit((VarExp)exp);
+    } else if(exp instanceof IntExp) {
+      visit((IntExp)exp);
     }
-    // } else if(exp instanceof IntExp) {
-    //   visit((IntExp)exp);
-    // }
+  }
+
+  public void visit( IntExp exp) {
+    
   }
 
   // Function Expression
