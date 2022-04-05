@@ -9,6 +9,12 @@ public class FunctionSymbol extends Symbol {
     this.type = type;
     this.id = id;
     this.params = params;
-    this.address;
+  }
+
+  public FunctionSymbol(int type, String id, ArrayList<Symbol> params, int address) {
+    this.type = type;
+    this.id = id;
+    this.params = params;
+    this.address = address;
   }
 }
