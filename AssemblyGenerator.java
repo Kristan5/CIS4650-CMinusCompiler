@@ -186,6 +186,49 @@ public class AssemblyGenerator {
 
   // Declaration List Expression
   public void visit( DecList decList) {
+    try {
+      PrintWriter writer = new PrintWriter(this.filename);
+      writer.close();
+    } catch (FileNotFoundException err) {
+      err.printStackTrace();
+    }
+
+    // Init symbol table and new scope
+    symbolTable.newScope(); 
+    
+    // input() and output() functions
+    FunctionSymbol input = new FunctionSymbol(Type.INT, "input", new ArrayList<Symbol>());
+    symbolTable.addSymbol("input", input);
+
+    // Prelude for code generation, Slide 10, Lecture 11 - TMSimulator
+    emitComment("Standard Prelude");
+    emitRM("LD", GP, 0, AC, "Load GP with max address");
+    emitRM("LDA", FP, 0, GP, "Copy GP to FP");
+    emitRM("ST", 0, 0, 0, "Clear value at location 0");
+    int savedLoc = emitSkip(1)
+
+    // Jump around I/O functions, Slide 15 and 20, Lecture 11 - TMSimulator
+    // Input
+    emitComment("Jump around I/O functions");
+    emitComment("Code for Input Routine");
+    emitRM("ST", 0, -1, FP, "Store return");
+    emitOp("IN", 0, 0, 0, "Input");
+    emitRM("LD", PC, -1, FP, "Return caller");
+
+    // Output
+    emitComment("Code for Output Routine");
+    emitRM("ST", 0, -1, FP, "Store return");
+    emitRM("LD", 0, -2, FP, "Load output value");
+    emitOp("OUT", 0, 0, 0, "Output");
+    emitRM("LD", 7, -1, FP, "Return caller");
+
+    // Jump around I/O
+    int savedLoc2 = emitSkip(0);
+    emitBackup(savedLoc);
+    emitRM_Abs("LDA", PC, savedLoc2, "Jump around I/O code");
+    emitRestore();
+
+
     // // System.out.println("DecList");
     // symbolTable.newScope(); 
     
