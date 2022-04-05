@@ -51,11 +51,7 @@ public class AssemblyGenerator {
     emitLoc = loc;
   }
 
-<<<<<<< HEAD
-  public void emitRestore(void) {
-=======
   public void emitRestore() {
->>>>>>> 4c55184ac876a7e63ba198ae5ac0f1a2d2e959b9
     emitLoc = highEmitLoc;
   }
 
