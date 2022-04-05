@@ -22,7 +22,6 @@ public class AssemblyGenerator {
   // Points to the bottom of the global stackframe dMem
   public int globalOffset = 0;
 
-
   public AssemblyGenerator(String filename, DecList result) {
     this.result = result; 
     this.filename = filename; 
@@ -52,7 +51,11 @@ public class AssemblyGenerator {
     emitLoc = loc;
   }
 
+<<<<<<< HEAD
+  public void emitRestore(void) {
+=======
   public void emitRestore() {
+>>>>>>> 4c55184ac876a7e63ba198ae5ac0f1a2d2e959b9
     emitLoc = highEmitLoc;
   }
 
@@ -98,6 +101,13 @@ public class AssemblyGenerator {
     }
   }
 
+  public void emitOP(String op, int dest, int r, int r1, String comment) {
+    String output = emitLoc + ": " + op + " " + dest + "," + r + "," + r1;
+    
+    outputCode(output);
+    ++emitLoc;
+    outputCode("\t" + comment + "\n");
+  }
 
 
   // Expression List
