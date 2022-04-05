@@ -72,7 +72,7 @@ public class AssemblyGenerator {
     PrintWriter output = null;
 
     try {
-      output = new PrintWriter(new FileOutputStream(this.filename, true));
+      output = new PrintWriter(new FileOutputStream("test.tm", true)); //MAKE SURE TO CHANGE HARDCODED FILENAME
       output.printf(code);
       output.close();
     } catch( FileNotFoundException err) {
@@ -97,7 +97,7 @@ public class AssemblyGenerator {
     }
   }
 
-  public void emitOP(String op, int dest, int r, int r1, String comment) {
+  public void emitOp(String op, int dest, int r, int r1, String comment) {
     String output = emitLoc + ": " + op + " " + dest + "," + r + "," + r1;
     
     outputCode(output);
@@ -205,7 +205,7 @@ public class AssemblyGenerator {
     emitRM("LD", GP, 0, AC, "Load GP with max address");
     emitRM("LDA", FP, 0, GP, "Copy GP to FP");
     emitRM("ST", 0, 0, 0, "Clear value at location 0");
-    int savedLoc = emitSkip(1)
+    int savedLoc = emitSkip(1);
 
     // Jump around I/O functions, Slide 15 and 20, Lecture 11 - TMSimulator
     // Input
@@ -227,7 +227,6 @@ public class AssemblyGenerator {
     emitBackup(savedLoc);
     emitRM_Abs("LDA", PC, savedLoc2, "Jump around I/O code");
     emitRestore();
-
 
     // // System.out.println("DecList");
     // symbolTable.newScope(); 
