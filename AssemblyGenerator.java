@@ -52,7 +52,7 @@ public class AssemblyGenerator {
     emitLoc = loc;
   }
 
-  public void emitRestor(void) {
+  public void emitRestore() {
     emitLoc = highEmitLoc;
   }
 
