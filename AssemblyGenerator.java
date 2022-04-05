@@ -1,10 +1,27 @@
 import absyn.*; 
 import symbol.*; 
+import java.io.*;
+import java.util.ArrayList;
 
 public class AssemblyGenerator {
   public DecList result; 
   public SymbolTable symbolTable; 
   public String filename; 
+
+  // Special Registers, Slide 10 Lecture 11 - TMSimulator
+  public static final int PC = 7;
+  public static final int GP = 6; // Points to top of dMem
+  public static final int FP = 5; // Points to curr stackframe in dMem
+  public static final int AC = 0;
+  public static final int AC1 = 1;
+
+  //Points to curr instr generating, may go back to earlier loc for backpatching
+  public int emitLoc = 0;
+  // Points to next available space so we can continue adding new instr
+  public int highEmitLoc = 0; 
+  // Points to the bottom of the global stackframe dMem
+  public int globalOffset = 0;
+
 
   public AssemblyGenerator(String filename, DecList result) {
     this.result = result; 
@@ -13,6 +30,75 @@ public class AssemblyGenerator {
     
     visit(result);
   }
+
+  /*  Code Emitting Routines: Slide 19 Lecture 11 - TMSimulator
+      Functions to maintain code space: some methods like emitRO, emitRM, and
+      emitComment need to be added */
+  public int emitSkip(int distance) {
+    int i = emitLoc;
+    emitLoc += distance;
+
+    if(highEmitLoc < emitLoc) {
+      highEmitLoc = emitLoc;
+    }
+
+    return i;
+  }
+
+  public void emitBackup(int loc) {
+    if(loc > highEmitLoc) {
+      emitComment("BUG in emitBackup");
+    }
+    emitLoc = loc;
+  }
+
+  public void emitRestor(void) {
+    emitLoc = highEmitLoc;
+  }
+
+  public void emitRM_Abs(String op, int r, int a, String comment) {
+    String output = emitLoc + ": " + op + " " + r + "," + (a - (emitLoc + 1)) + "(" + PC + ")";
+
+    outputCode(output);
+    ++emitLoc;
+    outputCode("\t" + comment + "\n");
+
+    if(highEmitLoc < emitLoc) {
+      highEmitLoc = emitLoc;
+    }
+  }
+
+  // Write out code to file
+  public void outputCode(String code) {
+    PrintWriter output = null;
+
+    try {
+      output = new PrintWriter(new FileOutputStream(this.filename, true));
+      output.printf(code);
+      output.close();
+    } catch( FileNotFoundException err) {
+      err.printStackTrace();
+    }
+  }
+
+  public void emitComment(String comment) {
+    String output = "* " + comment + "\n";
+    outputCode(output);
+  }
+
+  public void emitRM(String op, int r, int offset, int r1, String comment) {
+    String output = emitLoc + ": " + op + " " + r + "," + offset + "(" + r1 + ")";
+
+    outputCode(output);
+    ++emitLoc;
+    outputCode("\t" + comment + "\n");
+
+    if(highEmitLoc < emitLoc) {
+      highEmitLoc = emitLoc;
+    }
+  }
+
+
 
   // Expression List
   public void visit( ExpList expList) {
