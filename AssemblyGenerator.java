@@ -199,6 +199,12 @@ public class AssemblyGenerator {
     // input() and output() functions
     FunctionSymbol input = new FunctionSymbol(Type.INT, "input", new ArrayList<Symbol>());
     symbolTable.addSymbol("input", input);
+    
+    ArrayList<Symbol> params = new ArrayList<Symbol>();
+    params.add(new VarSymbol(Type.INT, ""));
+    
+    FunctionSymbol output = new FunctionSymbol(Type.VOID, "output", params);
+    symbolTable.addSymbol("output", output);
 
     // Prelude for code generation, Slide 10, Lecture 11 - TMSimulator
     emitComment("Standard Prelude");
@@ -227,6 +233,22 @@ public class AssemblyGenerator {
     emitBackup(savedLoc);
     emitRM_Abs("LDA", PC, savedLoc2, "Jump around I/O code");
     emitRestore();
+
+    
+    // FunctionSymbol output = new FunctionSymbol(Type.VOID, "output", params);
+    // ArrayList<Symbol> params = new ArrayList<Symbol>();
+    // params.add(new VarSymbol(Type.INT, ""));
+
+    FunctionSymbol adr = (FunctionSymbol)symbolTable.getFunction("main");
+
+    // Finale for code generation
+    emitComment("Finale Generation");
+    emitRM("ST", FP, globalOffset, FP, "Push Old Frame Pointer");
+    emitRM("LDA", FP, globalOffset, FP, "Push frame");
+    emitRM("LDA", 0, 1, PC, "Load AC with return pointer");
+    emitRM_Abs("LDA", PC, adr.address, "Jump to main location");
+    emitRM("LD", FP, 0, FP, "Pop frame");
+    emitOp("HALT", 0, 0, 0, "HALT");
 
     // // System.out.println("DecList");
     // symbolTable.newScope(); 
