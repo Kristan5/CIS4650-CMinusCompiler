@@ -108,10 +108,10 @@ public class AssemblyGenerator {
 
   // Expression List
   public void visit( ExpList expList) {
-    // while( expList != null ) {
-    //   if (expList.head != null) visit(expList.head); 
-    //   expList = expList.tail;
-    // } 
+    while( expList != null ) {
+      if (expList.head != null) visit(expList.head); 
+      expList = expList.tail;
+    } 
   }
 
   // ArrayDec
@@ -234,14 +234,11 @@ public class AssemblyGenerator {
     emitRM_Abs("LDA", PC, savedLoc2, "Jump around I/O code");
     emitRestore();
 
-    
-    // FunctionSymbol output = new FunctionSymbol(Type.VOID, "output", params);
-    // ArrayList<Symbol> params = new ArrayList<Symbol>();
-    // params.add(new VarSymbol(Type.INT, ""));
-
     FunctionSymbol adr = (FunctionSymbol)symbolTable.getFunction("main");
 
-    // Finale for code generation
+    // Generate Code
+
+    // Finale for code generation, Slide 16, Lecture 11 - TMSimulator
     emitComment("Finale Generation");
     emitRM("ST", FP, globalOffset, FP, "Push Old Frame Pointer");
     emitRM("LDA", FP, globalOffset, FP, "Push frame");
@@ -275,7 +272,7 @@ public class AssemblyGenerator {
     //   System.err.println("Error: File does not have a main function");
     // }
 
-    // symbolTable.delCurrScope();
+    symbolTable.delCurrScope();
   }
   
   // Declaration

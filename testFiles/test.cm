@@ -1,0 +1,5 @@
+/* No errors
+** Takes two numbers and divides them...if denominator is 0 then return 0*/
+void main(void) {
+    
+}
