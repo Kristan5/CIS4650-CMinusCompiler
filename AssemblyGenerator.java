@@ -313,26 +313,27 @@ public class AssemblyGenerator {
   }
 
   // Expression
-  public void visit( Exp exp) {
+  public int visit( Exp exp, int offset, boolean isAdd) {
     if(exp instanceof ReturnExp) {
-      visit((ReturnExp)exp);
+      visit((ReturnExp)exp, offset);
     } else if(exp instanceof CompoundExp) {
-      visit((CompoundExp)exp);
+      offset = visit((CompoundExp)exp, offset);
     } else if(exp instanceof WhileExp) {
-      visit((WhileExp)exp);
+      visit((WhileExp)exp, offset);
     } else if(exp instanceof IfExp) {
-      visit((IfExp)exp);
+      visit((IfExp)exp, offset);
     } else if(exp instanceof AssignExp) {
-      visit((AssignExp)exp);
+      visit((AssignExp)exp, offset);
     } else if(exp instanceof OpExp) {
-      visit((OpExp)exp);
+      visit((OpExp)exp, offset);
     } else if(exp instanceof CallExp) {
-      visit((CallExp)exp);
+      visit((CallExp)exp, offset);
     } else if(exp instanceof VarExp) {
-      visit((VarExp)exp);
+      visit((VarExp)exp, offset, isAdd);
     } else if(exp instanceof IntExp) {
       visit((IntExp)exp);
     }
+    return offset;
   }
 
   public void visit( IntExp exp) {
@@ -452,30 +453,28 @@ public class AssemblyGenerator {
   }
   
   // Simple Variable
-  public void visit( SimpleVar exp) {
-    // String name = exp.name;
-    // int row = exp.row + 1;
+  public void visit( SimpleVar exp, int offset, boolean isAdd) {
+    String name = exp.name;
+    VarSymbol var = (VarSymbol) symbolTable.getSymbol(name);
 
-    // if (symbolTable.getSymbol(name) != null) {
-    //   if (symbolTable.getSymbol(name) instanceof VarSymbol) {
-    //     if (symbolTable.getSymbol(name).type != Type.INT) {
-    //       setHasErrors(); 
-    //       System.err.println("Error: Expected integer instead of void variable '" + name + "' on line: " + row); 
-    //     }
-    //   }
-    //   else if (symbolTable.getSymbol(name).type != Type.INT) {
-    //     setHasErrors();
-    //     System.err.println("Error: Expected integer instead of void Array variable '" + name + "' on line: " + row); 
-    //   }
-    //   else {
-    //     setHasErrors();
-    //     System.err.println("Error: Can't convert array '" + name + "' to int on line: " + row); 
-    //   }
-    // }
-    // else {
-    //   setHasErrors(); 
-    //   System.err.println("Error: Undefined variable '" + name + "' on line: " + row); 
-    // }
+    emitComment("-> ID");
+    emitComment("Looking up ID: " + name);
+
+    if(symbolTable.symbExists(name) == 0) {
+      if(isAdd) {
+        emitRM("LDA", 0, var.offset, GP, "Load ID Address");
+      } else {
+        emitRM("LD", 0, var.offset, GP, "Load ID Value");
+      }
+    } else {
+      if(isAdd) {
+        emitRM("LDA", 0, var.offset, FP, "Load ID Address");
+      } else {
+        emitRM("LD", 0, var.offset, FP, "Load ID Address");
+      }
+    }
+
+    emitComment("<- ID");
   }
 
   // Variable

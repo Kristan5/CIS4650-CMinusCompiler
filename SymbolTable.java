@@ -141,4 +141,17 @@ public class SymbolTable {
     private HashMap<String, Symbol> getScope(int id) {
         return symbolTable.get(id);
     }
+
+    // Checks if symbol exists in table
+    public int symbExists(String symbol) {
+        int length = symbolTable.size() -1;
+
+        for(int i = length; i >= 0; i--) {
+            if(symbolTable.get(i).containsKey(symbol)) {
+                return i;
+            }
+        }
+        
+        return -1; 
+    }
 }
