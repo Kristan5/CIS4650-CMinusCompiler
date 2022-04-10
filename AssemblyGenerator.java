@@ -107,9 +107,11 @@ public class AssemblyGenerator {
 
 
   // Expression List
-  public void visit( ExpList expList) {
+  public void visit( ExpList expList, int offset) {
     while( expList != null ) {
-      if (expList.head != null) visit(expList.head); 
+      if (expList.head != null) {
+       visit(expList.head, offset, false); 
+      } 
       expList = expList.tail;
     } 
   }
@@ -234,6 +236,14 @@ public class AssemblyGenerator {
     emitRM_Abs("LDA", PC, savedLoc2, "Jump around I/O code");
     emitRestore();
 
+    /* Recursive code generation */
+    while (decList != null){
+			if (decList.head != null){
+				visit(decList.head);
+			}
+			decList = decList.tail;
+		}
+
     FunctionSymbol adr = (FunctionSymbol)symbolTable.getFunction("main");
 
     // Generate Code
@@ -277,11 +287,29 @@ public class AssemblyGenerator {
   
   // Declaration
   public void visit( Dec decl) {
-    // if(decl instanceof VarDec) {
-    //   visit((VarDec)decl);
-    // } else if(decl instanceof FunctionDec) {
-    //   visit((FunctionDec)decl);
-    // }
+    if(decl instanceof VarDec) {
+
+      VarDec v = (VarDec)decl;
+
+      if(v instanceof SimpleDec) {
+        SimpleDec sV = (SimpleDec)v;
+        VarSymbol symb = new VarSymbol(Type.INT, sV.name, globalOffset);
+        symbolTable.addSymbol(sV.name, symb);
+        emitComment("Allocating global variable: " + sV.name);
+        emitComment("<- varDecl");
+        globalOffset = globalOffset - 1;
+      } else if(v instanceof ArrayDec) {
+        ArrayDec aV = (ArrayDec)v;
+        ArraySymbol symb = new ArraySymbol(Type.INT, aV.name, aV.size.value, globalOffset - (aV.size.value - 1));
+        symbolTable.addSymbol(aV.name, symb);
+        emitComment("Allocating global variable: " + aV.name);
+        emitComment("<- varDecl");
+        globalOffset = globalOffset - aV.size.value;
+      }
+      visit((VarDec)decl);
+    } else if(decl instanceof FunctionDec) {
+      visit((FunctionDec)decl);
+    }
   }
 
   // Expression
@@ -469,13 +497,14 @@ public class AssemblyGenerator {
   }
 
   // Variable Declaration List
-  public void visit( VarDecList exp) {
-    // while(exp != null) {
-    //   if(exp.head != null) {
-    //     visit(exp.head);
-    //   }
-    //   exp = exp.tail;
-    // }
+  public int visit( VarDecList exp, int offset, boolean isParam) {
+    while(exp != null) {
+      if(exp.head != null) {
+        offset = visit(exp.head, offset, isParam);
+      }
+      exp = exp.tail;
+    }
+    return offset;
   }
 
   // Variable Expression
