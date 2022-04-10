@@ -117,7 +117,7 @@ public class AssemblyGenerator {
   }
 
   // ArrayDec
-  public void visit( ArrayDec expList) {
+  // public void visit( ArrayDec expList) {
     // int type = expList.type.type;
     // String name = expList.name;
     // int size = expList.size.value;
@@ -138,51 +138,200 @@ public class AssemblyGenerator {
 
     // ArraySymbol varSymbol = new ArraySymbol(type, name, size);
     // symbolTable.addSymbol(name, (Symbol)varSymbol);
-  }
+  // }
 
   // Assign Expression
-  public void visit( AssignExp exp) {
-    // visit(exp.lhs);
-    // visit(exp.rhs);
-  }
+  public void visit( AssignExp exp, int offset) {
+    // emitComment("-> OP");
+
+    // if(exp.lhs instanceof SimpleVar) {
+    //   visit( (SimpleVar)exp.lhs, offset, true);
+    //   emitRM("ST", AC, offset, FP, "OP: Push Left");
+    //   offset = offset - 1;
+    // } else if(exp.lhs instanceof IndexVar) {
+    //   visit( (IndexVar)exp.lhs, offset, false);
+    //   offset = offset - 1;
+    // }
+
+    // if(exp.rhs instanceof OpExp) {
+    //   visit(exp.rhs, offset, false);
+    // }
+    // else if(exp.rhs instanceof CallExp) {
+    //   visit(exp.rhs, offset, false);
+    // }
+    // else if(exp.rhs instanceof IntExp) {
+    //   visit(exp.rhs, offset, false);
+    // }
+    // else if(exp.rhs instanceof VarExp) {
+    //   visit(exp.rhs, offset, false);
+    // }
+    
+    // offset = offset + 1;
+    // emitRM("LD", 1, offset, FP, "OP: Load Left");
+    // emitRM("ST", AC, 0, 1 , "Assign: Store Value");
+    // emitComment("<- OP");
+    
+   }
 
   // If Expression
-  public void visit( IfExp exp) {
-    // visit(exp.test);
-    // visit(exp.thenpart);
-    // if (exp.elsepart != null ){
-    //   visit(exp.elsepart);
-    // }
+  public void visit( IfExp exp, int offset) {
+    emitComment("-> IF");
+    symbolTable.newScope();
+
+    visit(exp.test, offset, false);
+    int savedLoc = emitSkip(1);
+    visit(exp.thenpart, offset, false);
+    int savedLoc2 = emitSkip(0);
+
+    emitBackup(savedLoc);
+    emitRM_Abs("JEQ", 0, savedLoc2, "IF: Jump to Else Part");
+    emitRestore();
+    visit(exp.elsepart, offset, false);
+
+    symbolTable.delCurrScope();
+    emitComment("<- IF");
   }
 
   // Operation Expression
-  public void visit( OpExp exp) {    
-    // visit(exp.left);
-    // visit(exp.right);
+  public void visit( OpExp exp, int offset) {    
+    emitComment("-> OP");
+
+    if(exp.left instanceof VarExp) {
+      VarExp varExp = (VarExp)exp.left;
+
+      if(varExp.var instanceof SimpleVar) {
+        visit(varExp, offset, false);
+        emitRM("ST", AC, offset, FP, "OP: Push Left");
+        offset = offset - 1;
+      } else {
+        visit(varExp, offset, true);
+        offset = offset - 1;
+      }
+    }
+    else if(exp.left instanceof OpExp) {
+      visit(exp.left, offset, false);
+      emitRM("ST", AC, offset, FP, "");
+      offset = offset - 1;
+    }
+    else if(exp.left instanceof IntExp) {
+      visit(exp.left, offset, false);
+      emitRM("ST", AC, offset, FP, "OP: Push Left");
+      offset = offset - 1;
+    }
+    else if(exp.left instanceof CallExp) {
+      visit(exp.left, offset, false);
+    }
+
+    if(exp.right instanceof VarExp) {
+      VarExp varExp = (VarExp)exp.right;
+
+      if(varExp.var instanceof SimpleVar) {
+        visit(varExp, offset, false);
+      } else {
+        visit(varExp, offset, true);
+      }
+    }
+    else if(exp.right instanceof OpExp) {
+      visit(exp.right, offset, false);
+    }
+    else if(exp.right instanceof IntExp) {
+      visit(exp.right, offset, false);
+    }
+    else if(exp.right instanceof CallExp) {
+      visit(exp.right, offset, false);
+    }
+    
+    offset = offset + 1;
+    emitRM("LD", 1, offset, FP, "OP: Load Left");
+
+    switch(exp.op) {
+      case OpExp.PLUS:
+        emitOp("ADD", AC, 1, AC, "OP +");
+        break;
+      case OpExp.MINUS:
+        emitOp("SUB", AC, 1, AC, "OP -");
+        break;
+      case OpExp.TIMES:
+        emitOp("MUL", AC, 1, AC, "OP *");
+        break;
+      case OpExp.DIVIDE:
+        emitOp("DIV", AC, 1, AC, "OP /");
+        break;
+      case OpExp.EQ:
+        emitOp("EQU", AC, 1, AC, "OP =");
+        break;
+      case OpExp.EQEQ:
+        emitOp("SUB", AC, 1, AC, "OP == ");
+        emitRM("JEQ", AC, 2, PC, " ");
+        emitRM("LDC", AC, 0, 0, "False Casse");
+        emitRM("LDA", PC, 1, PC, "Unconditional Jump");
+        emitRM("LDC", AC, 1, 0, "True Case");
+        break;
+      case OpExp.LT:
+        emitOp("SUB", AC, 1, AC, "OP <");
+        emitRM("JLT", AC, 2, PC, " ");
+        emitRM("LDC", AC, 0, 0, "False Case");
+        emitRM("LDA", PC, 1, PC, "Unconditional Jump");
+        emitRM("LDC", AC, 1, 0, "True Case");
+        break;
+      case OpExp.GT:
+        emitOp("SUB", AC, 1, AC, "OP >");
+        emitRM("JGT", AC, 2, PC, " ");
+        emitRM("LDC", AC, 0, 0, "False Case");
+        emitRM("LDA", PC, 1, PC, "Unconditional Jump");
+        emitRM("LDC", AC, 1, 0, "True Case");
+        break;
+      case OpExp.NOTEQ:
+        emitOp("SUB", AC, 1, AC, "OP !=");
+        emitRM("JNE", AC, 2, PC, " ");
+        emitRM("LDC", AC, 0, 0, "False Case");
+        emitRM("LDA", PC, 1, PC, "Unconditional Jump");
+        emitRM("LDC", AC, 1, 0, "True Case");
+        break;
+      case OpExp.LTE:
+        emitOp("SUB", AC, 1, AC, "OP <=");
+        emitRM("JLE", AC, 2, PC, " ");
+        emitRM("LDC", AC, 0, 0, "False Case");
+        emitRM("LDA", PC, 1, PC, "Unconditional Jump");
+        emitRM("LDC", AC, 1, 0, "True Case");
+        break;
+      case OpExp.GTE:
+        emitOp("SUB", AC, 1, AC, "OP >=");
+        emitRM("JGE", AC, 2, PC, " ");
+        emitRM("LDC", AC, 0, 0, "False Case");
+        emitRM("LDA", PC, 1, PC, "Unconditional Jump");
+        emitRM("LDC", AC, 1, 0, "True Case");
+        break;
+    }
+
+    emitComment("<- OP");
   }
 
   // Call Expression
-  public void visit( CallExp exp) {
-    // String name = exp.function;
-    // int row = exp.row + 1; 
-    // FunctionSymbol functionSymbol = (FunctionSymbol)symbolTable.getFunction(name);
-    // int functionSymbolParamsCount = symbolTable.getFunctionParamCount(name);
-    // int callExpParamsCount = exp.params_count(); 
-
-    // // Check if function exists
-    // if (symbolTable.getFunction(name) == null) {
-    //   setHasErrors();
-    //   System.err.println("Error: Undefined function '" + name + "' on line: " + row); 
-    // }
+  public void visit( CallExp exp, int offset) {
+    String name = exp.function;
+    FunctionSymbol functionSymbol = (FunctionSymbol)symbolTable.getFunction(name);
     
-    // // Check if signature correct (if number of arguments is correct)F
-    // if (functionSymbolParamsCount != callExpParamsCount) {
-    //   setHasErrors();
-    //   System.err.println("Error: Wrong number of parameters for function '" + name + "' on line: " + row); 
-    // }
+    emitComment("-> Call");
+    emitComment("Call of Function: " + exp.function);
 
-    // // Check if params are correct 
-    // checkFunctionCallParams(exp.args, functionSymbol, functionSymbolParamsCount); 
+    int off = -2;
+
+    while(exp.args != null) {
+      if(exp.args.head != null) {
+        visit(exp.args.head, offset, false);
+        emitRM("ST", AC, offset + off, FP, "OP: Push Left");
+        off = off - 1;
+      }
+      exp.args = exp.args.tail;
+    }
+     
+    emitRM("ST", FP, offset, FP, "Push OFP");
+    emitRM("LDA", FP, offset, FP, "Push Frame");
+    emitRM("LDA", 0, 1, PC, "Load AC with Ret Pointer");
+    emitRM_Abs("LDA", PC, functionSymbol.address, "Jump to Function Location");
+    emitRM("LD", FP, 0, FP, "Pop Frame");
+    emitComment("<- Call");
 
   }
 
@@ -337,99 +486,89 @@ public class AssemblyGenerator {
   }
 
   public void visit( IntExp exp) {
-    
+    emitComment("-> Constant");
+    emitRM("LDC", AC, exp.value, 0, "Load Constant");
+    emitComment("<- Constant");
   }
 
   // Function Expression
   public void visit( FunctionDec exp) {
-    // // Adding params for function
-    // ArrayList<Symbol> functionParams = addFunctionParams(exp.param_list);
-    // // Adding function to table
-    // int type = exp.type.type;
-    // String name = exp.function;
-    // FunctionSymbol functionSymbol = new FunctionSymbol(type, name, functionParams); 
-    // symbolTable.addSymbol(name, (Symbol)functionSymbol);
-    // symbolTable.newScope();
-    
-    // // Setting FunctionReturnType
-    // functionReturnType = type;
+    emitComment("-> FunctionDec");
+    emitComment("Processing Function: " + exp.function);
+    emitComment("Jump around function body here");
 
-    // if (name.equals("main")) hasMain = true; 
+    int offset = -2;
+    int savedLoc = emitSkip(1);
 
-    // // Analyze param_list 
-    // visit(exp.param_list);
-    // // Analyze function body (CompoundExp)
-    // visit((CompoundExp)exp.test, functionSymbol);
+    FunctionSymbol function = new FunctionSymbol(Type.INT, exp.function, null, emitLoc);
+    symbolTable.addSymbol(exp.function, function);
+    symbolTable.newScope();
+
+    emitRM("ST", 0, -1, FP, "Store Return");
+    offset = visit(exp.param_list, offset, true);
+    offset = visit(exp.test, offset, true);
+    emitRM("LD", PC, -1, FP, "Return Caller");
+
+    int savedLoc2 = emitSkip(0);
+    emitBackup(savedLoc);
+    emitRM_Abs("LDA", PC, savedLoc2, "Jump around function body");
+    emitRestore();
+    emitComment("<- FunctionDec");
+    symbolTable.delCurrScope();
+  
   }
 
   // Compound Expression
-  public void visit( CompoundExp exp, FunctionSymbol function) {
-    // // TODO: NEED TO FIGURE OUT WAY TO CHECK IF GETS TO END OF FUNCTION WITHOUT RETURN
-    // boolean nonVoid;
-
-    // if (function.type == Type.INT) nonVoid = true; 
-    // else nonVoid = false; 
-
-    // visit(exp.decList);
-    // visit(exp.expList);
-
-    // symbolTable.delCurrScope();
+  public int visit( CompoundExp exp, int offset) {
+    emitComment("-> Compound Statement");
+    offset = visit(exp.decList, offset, false);
+    visit(exp.expList, offset);
+    emitComment("<- Compound Statement");
+    return offset;
   }
 
-  //Compound Expression
+  /*Compound Expression
   public void visit( CompoundExp exp) {
     // symbolTable.newScope();
     // visit(exp.decList);
     // visit(exp.expList);
     // symbolTable.delCurrScope(); 
-  }
+  }*/
 
   // Index Variable
-  public void visit( IndexVar exp) {
-  
-    // Symbol sym = symbolTable.getSymbol(exp.name);
-    // int row = exp.row + 1;
+  public void visit( IndexVar exp, int offset, boolean isAdd) {
+    IndexVar e = (IndexVar) exp;
+    String name = e.name;
+    ArraySymbol var = (ArraySymbol)symbolTable.getSymbol(name);
 
-    // if (sym != null) {
-    //   if (!(sym instanceof ArraySymbol)) {
-    //     setHasErrors(); 
-    //     System.err.println("Error: Line " + row + ": " + exp.name + " is not an array");
-    //   }
-    // }
-    // else {
-    //   setHasErrors(); 
-    //   System.err.println("");
-    // }
+    emitComment("-> Subs");
 
-    // visit(exp.index);
+    if(symbolTable.symbExists(name) == 0) {
+      emitRM("LD", AC, var.offset, GP, "Load ID Value");
+      emitRM("ST", AC, offset, GP, "Store Array Address");
+      offset = offset - 1;
+      visit(e.index, offset, false);
+      emitComment("<- Subs");
+    } else {
+      emitRM("LD", AC, var.offset, FP, "Load ID Value");
+      emitRM("ST", AC, offset, FP, "Store Array Address");
+      offset = offset - 1;
+      visit(e.index, offset, false);
+      emitComment("<- Subs");
+    }
 
   }
 
   // Return Expression
-  public void visit( ReturnExp exp) {
-    // // If void function returns something
-    // if (functionReturnType == Type.VOID) {
-    //   if (exp.test != null) {
-    //     setHasErrors(); 
-    //     int row = exp.row + 1; 
-    //     System.err.println("Error: Function with VOID return type returns value on line: " + row);
-    //     return; 
-    //   }
-    // }
-    // else {
-    //   if (exp.test == null) {
-    //     setHasErrors(); 
-    //     int row = exp.row + 1; 
-    //     System.err.println("Error: Function with Non-Void (INT) return type returns nothing on line: " + row); 
-    //   }
-    //   else {
-    //     visit(exp.test);
-    //   }
-    // }
+  public void visit( ReturnExp exp, int offset) {
+    emitComment("-> Return");
+    visit(exp.test, offset, false);
+    emitRM("LD", PC, -1, FP, "Return to Caller");
+    emitComment("<- Return");
   }
 
   // Simple Declaration
-  public void visit( SimpleDec exp) {
+  // public void visit( SimpleDec exp) {
     // int type = exp.type.type;
     // String name = exp.name;
 
@@ -450,7 +589,7 @@ public class AssemblyGenerator {
 
     // VarSymbol varSymbol = new VarSymbol(type, name);
     // symbolTable.addSymbol(name, (Symbol)varSymbol);
-  }
+  // }
   
   // Simple Variable
   public void visit( SimpleVar exp, int offset, boolean isAdd) {
@@ -478,13 +617,13 @@ public class AssemblyGenerator {
   }
 
   // Variable
-  public void visit( Var exp) {
+  // public void visit( Var exp) {
     // if(exp instanceof IndexVar) {
     //   visit((IndexVar)exp);
     // } else if(exp instanceof SimpleVar) {
     //   visit((SimpleVar)exp);
     // }
-  }
+  // }
 
   // Variable Declaration
   public int visit( VarDec exp, int offset, boolean isParam) {
@@ -532,15 +671,72 @@ public class AssemblyGenerator {
   }
 
   // Variable Expression
-  public void visit( VarExp exp) {
-    // visit(exp.var);
+  public void visit( VarExp exp, int offset, boolean isAdd) {
+    if(exp.var instanceof IndexVar) {
+      IndexVar indExp = (IndexVar) exp.var;
+      ArraySymbol var = (ArraySymbol) symbolTable.getSymbol(indExp.name);
+
+      if(symbolTable.symbExists(indExp.name) == 0) {
+        emitComment("-> Subs");
+        emitRM("LD", AC, var.offset, GP, "Load ID Value");
+        emitRM("ST", AC, offset, GP, "Store Array Address");
+        offset = offset - 1;
+        visit(indExp.index, offset, false);
+        emitComment("<- Subs");
+      }
+      else {
+        emitComment("-> Subs");
+        emitRM("LD", AC, var.offset, FP, "Load ID Value");
+        emitRM("ST", AC, offset, FP, "Store Array Address");
+        offset = offset - 1;
+        visit(indExp.index, offset, false);
+        emitComment("<- Subs");
+      }
+    }
+    else if(exp.var instanceof SimpleVar) {
+      SimpleVar simExp = (SimpleVar) exp.var;
+      VarSymbol var = (VarSymbol) symbolTable.getSymbol(simExp.name);
+      
+      if(symbolTable.symbExists(simExp.name) == 0) {
+        emitComment("-> ID");
+        emitComment("Looking up ID: " + simExp.name);
+        if(isAdd) {
+          emitRM("LDA", 0, var.offset, GP, "Load ID Address");
+        } else {
+          emitRM("LD", 0, var.offset, GP, "Load ID Value");
+        }
+        emitComment("<- ID");
+      } 
+      else {
+        emitComment("-> ID");
+        emitComment("Looking up ID: " + simExp.name);
+        if(isAdd) {
+          emitRM("LDA", 0, var.offset, FP, "Load ID Address");
+        } else {
+          emitRM("LD", 0, var.offset, FP, "Load ID Value");
+        }
+        emitComment("<- ID");
+      }
+    }
   }
 
   // While Expression
-  public void visit( WhileExp exp) {
-    // // Might have to change this
-    // visit(exp.test);
-    // visit(exp.block);
+  public void visit( WhileExp exp, int offset) {
+    emitComment("-> WHILE");
+    symbolTable.newScope();
+
+    emitComment("While: Jump After Body Comes Back Here");
+    int savedLoc = emitSkip(0);
+    visit(exp.test, offset, false);
+    int savedLoc2 = emitSkip(1);
+    visit(exp.block, offset, false);
+    emitRM_Abs("LDA", PC, savedLoc, "While: Absolute Jump to Test");
+    int savedLoc3 = emitSkip(0);
+    emitBackup(savedLoc2);
+    emitRM_Abs("JEQ", 0, savedLoc3, "While: Jump to End");
+    
+    symbolTable.delCurrScope();
+    emitComment("<- While");
   }
 
 }
