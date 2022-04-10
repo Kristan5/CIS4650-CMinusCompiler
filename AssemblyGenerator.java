@@ -488,12 +488,37 @@ public class AssemblyGenerator {
   }
 
   // Variable Declaration
-  public void visit( VarDec exp) {
-    // if(exp instanceof SimpleDec) {
-    //   visit((SimpleDec)exp);
-    // } else if(exp instanceof ArrayDec) {
-    //   visit((ArrayDec)exp);
-    // } 
+  public int visit( VarDec exp, int offset, boolean isParam) {
+    if(isParam) {
+      if(exp instanceof ArrayDec) {
+        ArrayDec dec = (ArrayDec)exp;
+        ArraySymbol symb = new ArraySymbol(Type.INT, dec.name, 1, offset--);
+        symbolTable.addSymbol(dec.name, symb);
+      } 
+      else if(exp instanceof SimpleDec) {
+        SimpleDec dec = (SimpleDec)exp;
+        VarSymbol symb = new VarSymbol(Type.INT, dec.name, offset);
+        offset = offset - 1;
+        symbolTable.addSymbol(dec.name, symb);
+      }
+    } else {
+      if(exp instanceof ArrayDec) {
+        ArrayDec dec = (ArrayDec)exp;
+        offset = offset - (dec.size.value - 1);
+        ArraySymbol symb = new ArraySymbol(Type.INT, dec.name, dec.size.value, offset);
+        offset = offset - 1;
+        symbolTable.addSymbol(dec.name, symb);
+        emitComment("Processing local variable : " + dec.name);
+      } 
+      else if(exp instanceof SimpleDec) {
+        SimpleDec dec = (SimpleDec)exp;
+        ArraySymbol symb = new ArraySymbol(Type.INT, dec.name, offset);
+        offset = offset - 1;
+        symbolTable.addSymbol(dec.name, symb);
+        emitComment("Processing local variable : " + dec.name);
+      }
+    }
+    return offset;
   }
 
   // Variable Declaration List
