@@ -377,31 +377,6 @@ public class AssemblyGenerator {
     emitRM("LD", FP, 0, FP, "Pop frame");
     emitOp("HALT", 0, 0, 0, "HALT");
 
-    // // System.out.println("DecList");
-    // symbolTable.newScope(); 
-    
-    // // input() and output() functions
-    // FunctionSymbol input = new FunctionSymbol(Type.INT, "input", new ArrayList<Symbol>());
-    // symbolTable.addSymbol("input", input);
-    
-    // ArrayList<Symbol> params = new ArrayList<Symbol>();
-    // params.add(new VarSymbol(Type.INT, ""));
-    
-    // FunctionSymbol output = new FunctionSymbol(Type.VOID, "output", params);
-    // symbolTable.addSymbol("output", output);
-
-    // while(decList != null) {
-    //   if(decList.head != null)
-    //     visit(decList.head);
-    //   decList = decList.tail;
-    // }
-
-    // // Check Main Function
-    // if (!this.hasMain) {
-    //   setHasErrors(); 
-    //   System.err.println("Error: File does not have a main function");
-    // }
-
     symbolTable.delCurrScope();
   }
   
@@ -497,14 +472,6 @@ public class AssemblyGenerator {
     emitComment("<- Compound Statement");
     return offset;
   }
-
-  /*Compound Expression
-  public void visit( CompoundExp exp) {
-    // symbolTable.newScope();
-    // visit(exp.decList);
-    // visit(exp.expList);
-    // symbolTable.delCurrScope(); 
-  }*/
 
   // Index Variable
   public void visit( IndexVar exp, int offset, boolean isAdd) {
