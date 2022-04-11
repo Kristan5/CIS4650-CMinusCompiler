@@ -116,60 +116,31 @@ public class AssemblyGenerator {
     } 
   }
 
-  // ArrayDec
-  // public void visit( ArrayDec expList) {
-    // int type = expList.type.type;
-    // String name = expList.name;
-    // int size = expList.size.value;
-    // int row = expList.row + 1; 
-
-    // // Mismatched types: 
-    // if (type == Type.VOID) {
-    //   setHasErrors(); 
-    //   System.err.println("Error: Variable: '" + name + "' was declared as void on line: " + row);       
-    // }
-
-    // // Redeclaration: 
-    // if (symbolTable.isSameScope(name)) {
-    //   setHasErrors();
-    //   System.err.println("Error: Redeclaration of variable '" + name + "' on line: " + row); 
-    //   return;
-    // }
-
-    // ArraySymbol varSymbol = new ArraySymbol(type, name, size);
-    // symbolTable.addSymbol(name, (Symbol)varSymbol);
-  // }
-
   // Assign Expression
   public void visit( AssignExp exp, int offset) {
-    // emitComment("-> OP");
+    emitComment("-> OP");
 
-    // if(exp.lhs instanceof SimpleVar) {
-    //   visit( (SimpleVar)exp.lhs, offset, true);
-    //   emitRM("ST", AC, offset, FP, "OP: Push Left");
-    //   offset = offset - 1;
-    // } else if(exp.lhs instanceof IndexVar) {
-    //   visit( (IndexVar)exp.lhs, offset, false);
-    //   offset = offset - 1;
-    // }
+    visit(exp.lhs, offset, true);
+    emitRM("ST", AC, offset, FP, "OP: Push Left");
+    offset = offset - 1;
 
-    // if(exp.rhs instanceof OpExp) {
-    //   visit(exp.rhs, offset, false);
-    // }
-    // else if(exp.rhs instanceof CallExp) {
-    //   visit(exp.rhs, offset, false);
-    // }
-    // else if(exp.rhs instanceof IntExp) {
-    //   visit(exp.rhs, offset, false);
-    // }
-    // else if(exp.rhs instanceof VarExp) {
-    //   visit(exp.rhs, offset, false);
-    // }
+    if(exp.rhs instanceof OpExp) {
+      visit(exp.rhs, offset, false);
+    }
+    else if(exp.rhs instanceof CallExp) {
+      visit(exp.rhs, offset, false);
+    }
+    else if(exp.rhs instanceof IntExp) {
+      visit(exp.rhs, offset, false);
+    }
+    else if(exp.rhs instanceof VarExp) {
+      visit(exp.rhs, offset, false);
+    }
     
-    // offset = offset + 1;
-    // emitRM("LD", 1, offset, FP, "OP: Load Left");
-    // emitRM("ST", AC, 0, 1 , "Assign: Store Value");
-    // emitComment("<- OP");
+    offset = offset + 1;
+    emitRM("LD", 1, offset, FP, "OP: Load Left");
+    emitRM("ST", AC, 0, 1 , "Assign: Store Value");
+    emitComment("<- OP");
     
    }
 
@@ -566,30 +537,6 @@ public class AssemblyGenerator {
     emitRM("LD", PC, -1, FP, "Return to Caller");
     emitComment("<- Return");
   }
-
-  // Simple Declaration
-  // public void visit( SimpleDec exp) {
-    // int type = exp.type.type;
-    // String name = exp.name;
-
-    // // Mismatched types: 
-    // if (type == Type.VOID) {
-    //   setHasErrors(); 
-    //   int row = exp.row + 1; 
-    //   System.err.println("Error: Variable: '" + name + "' was declared as void on line: " + row);       
-    // }
-
-    // // Redeclaration: 
-    // if (symbolTable.isSameScope(name)) {
-    //   setHasErrors(); 
-    //   int row = exp.row + 1; 
-    //   System.err.println("Error: Redeclaration of variable '" + name + "' on line: " + row); 
-    //   return;
-    // }
-
-    // VarSymbol varSymbol = new VarSymbol(type, name);
-    // symbolTable.addSymbol(name, (Symbol)varSymbol);
-  // }
   
   // Simple Variable
   public void visit( SimpleVar exp, int offset, boolean isAdd) {

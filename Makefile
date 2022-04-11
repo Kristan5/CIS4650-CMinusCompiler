@@ -15,7 +15,7 @@ test:
 	# java -cp /usr/share/java/cup.jar:. Main -a testFiles/1.cm
 	# java -cp /usr/share/java/cup.jar:. Main -c testFiles/1.cm
 	# java -cp /usr/share/java/cup.jar:. Main -a -s testFiles/1.cm
-	java -cp /usr/share/java/cup.jar:. Main -c testFiles/test.cm
+	java -cp /usr/share/java/cup.jar:. Main -c testFiles/gcd.cm
 
 remake: 
 	make clean
@@ -35,7 +35,7 @@ parser.java: cm.cup
 	$(CUP) -expect 3 cm.cup
 
 clean:
-	rm -f parser.java Lexer.java sym.java *.class absyn/*.class symbol/*.class *~
+	rm -f parser.java Lexer.java sym.java *.class absyn/*.class symbol/*.class *~ test.tm
 
 # Test files for Checkpoint 1 demo: 
 fac: 
