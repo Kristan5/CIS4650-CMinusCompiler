@@ -695,7 +695,7 @@ public class AssemblyGenerator {
     }
     else if(exp.var instanceof SimpleVar) {
       SimpleVar simExp = (SimpleVar) exp.var;
-      VarSymbol var = (VarSymbol) symbolTable.getSymbol(simExp.name);
+      Symbol var = (Symbol) symbolTable.getSymbol(simExp.name);
       
       if(symbolTable.symbExists(simExp.name) == 0) {
         emitComment("-> ID");
