@@ -44,6 +44,10 @@ makefile targets to run respective files such as the following:
 ``` make ex1 ``` 
 (replace 1 with [2,3,4,5] for each x.cm file)
 
+### A Small Caveat: 
+ - There is a small issue currently that occurs when generating assembly code for a given file. 
+    The file being compiled will get overwritten by an empty file and the code needs to be re-
+    added to it. 
 
 ## Directory Structure: 
 
